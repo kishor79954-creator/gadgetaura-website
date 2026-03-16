@@ -1,20 +1,54 @@
 "use client"
 
-import { ContainerScroll } from "@/components/ui/container-scroll-animation"
-import { InstagramReels } from "@/components/ui/instagram-reels"
-import { Footer } from "@/components/ui/footer"
-import { CategorySection } from "@/components/landing/category-section"
-import Link from "next/link"
-import Image from "next/image"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
-import { Eye, ShoppingBag, ShoppingCart } from "lucide-react"
-import { GlowCard } from "@/components/ui/spotlight-card"
-import { ShinyButton } from "@/components/ui/shiny-button"
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient"
-import { Button } from "@/components/ui/button"
+import { ShoppingCart } from "lucide-react"
+
+// ─── Heavy components: lazy-loaded so they DON'T block first paint ───────────
+
+const LandingVideo = dynamic(
+  () => import("@/components/landing-video").then(m => m.LandingVideo),
+  { ssr: false, loading: () => <div className="w-full h-screen bg-background" /> }
+)
+
+const CategorySection = dynamic(
+  () => import("@/components/landing/category-section").then(m => m.CategorySection),
+  { ssr: false, loading: () => <div className="h-40 animate-pulse bg-muted rounded-xl mx-6" /> }
+)
+
+const GlowCard = dynamic(
+  () => import("@/components/ui/spotlight-card").then(m => m.GlowCard),
+  { ssr: false }
+)
+
+const HoverBorderGradient = dynamic(
+  () => import("@/components/ui/hover-border-gradient").then(m => m.HoverBorderGradient),
+  { ssr: false }
+)
+
+const ContainerScroll = dynamic(
+  () => import("@/components/ui/container-scroll-animation").then(m => m.ContainerScroll),
+  { ssr: false, loading: () => <div className="h-96 animate-pulse bg-muted rounded-2xl mx-6 mb-12" /> }
+)
+
+const InstagramReels = dynamic(
+  () => import("@/components/ui/instagram-reels").then(m => m.InstagramReels),
+  { ssr: false, loading: () => <div className="h-64 animate-pulse bg-muted rounded-2xl mx-6 mb-12" /> }
+)
+
+const Footer = dynamic(
+  () => import("@/components/ui/footer").then(m => m.Footer),
+  { ssr: false, loading: () => <div className="h-32 bg-muted" /> }
+)
+
+const VerticalImageStack = dynamic(
+  () => import("@/components/ui/vertical-image-stack").then(m => m.VerticalImageStack),
+  { ssr: false, loading: () => <div className="h-96 animate-pulse bg-muted rounded-2xl mx-6" /> }
+)
 
 import { supabase } from "@/lib/supabaseClient"
 import { useEffect, useState } from "react"
+import type { StackProduct } from "@/components/ui/vertical-image-stack"
 
 type FeaturedProduct = {
   id: string
@@ -168,7 +202,7 @@ function DynamicFeaturedProducts() {
   )
 }
 
-import { VerticalImageStack, StackProduct } from "@/components/ui/vertical-image-stack"
+
 
 
 
@@ -207,7 +241,7 @@ function DynamicPremiumStack() {
 
 /* ---------------- PAGE ---------------- */
 
-import { LandingVideo } from "@/components/landing-video"
+
 
 export default function LandingPage() {
 

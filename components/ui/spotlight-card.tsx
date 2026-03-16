@@ -81,7 +81,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
       backgroundColor: "var(--backdrop, transparent)",
       backgroundSize: "calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)))",
       backgroundPosition: "50% 50%",
-      backgroundAttachment: "fixed",
+
       border: "var(--border-size) solid var(--backup-border)",
       position: "relative",
       touchAction: "none",
@@ -99,7 +99,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
         [data-glow]::before, [data-glow]::after {
           pointer-events: none; content: ""; position: absolute;
           inset: calc(var(--border-size) * -1); border: var(--border-size) solid transparent;
-          border-radius: calc(var(--radius) * 1px); background-attachment: fixed;
+          border-radius: calc(var(--radius) * 1px);
           background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
           background-repeat: no-repeat; background-position: 50% 50%;
           mask: linear-gradient(transparent, transparent), linear-gradient(white, white);

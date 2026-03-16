@@ -7,8 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "./context/AuthContext"
 import { CartProvider } from "./context/Cart-Context"
 import { WishlistProvider } from "./context/WishlistContext"
+import { EtheralShadowClient } from "@/components/ui/etheral-shadow-client"
 
-import { EtheralShadow } from "@/components/ui/etheral-shadow"
 
 export const metadata: Metadata = {
   title: "Gadgetura",
@@ -23,15 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans bg-background text-foreground antialiased relative">
-        {/* Global Background Effect */}
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <EtheralShadow
-            color="rgba(128, 128, 128, 0.4)"
-            animation={{ scale: 100, speed: 90 }}
-            noise={{ opacity: 0.2, scale: 1.2 }}
-            sizing="fill"
-          />
-        </div>
+        <EtheralShadowClient />
 
         <ThemeProvider
           attribute="class"
