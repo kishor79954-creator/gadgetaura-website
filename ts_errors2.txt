@@ -1,0 +1,21 @@
+﻿components/add to cart/add-to-cart-button.tsx(15,19): error TS2345: Argument of type '{ id: any; name: any; price: any; image: any; }' is not assignable to parameter of type 'Product'.
+  Type '{ id: any; name: any; price: any; image: any; }' is missing the following properties from type 'Product': description, category
+components/ui/hero-section.tsx(94,31): error TS2322: Type '{ children: Element[]; speed: number; gap: number; }' is not assignable to type 'IntrinsicAttributes & InfiniteSliderProps'.
+  Property 'speed' does not exist on type 'IntrinsicAttributes & InfiniteSliderProps'.
+lib/data.ts(13,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(33,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(53,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(73,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(95,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(115,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(135,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(157,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(177,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(197,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(219,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(239,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(259,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(279,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(299,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/data.ts(319,5): error TS2561: Object literal may only specify known properties, but 'subCategory' does not exist in type 'Product'. Did you mean to write 'category'?
+lib/useAuth.tsx(7,3): error TS2695: Left side of comma operator is unused and has no side effects.
