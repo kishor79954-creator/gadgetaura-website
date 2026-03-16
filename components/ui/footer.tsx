@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Instagram, Youtube } from "lucide-react"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -59,14 +59,33 @@ export function Footer() {
           <h4 className="text-yellow-500 text-xs uppercase tracking-widest mb-4 font-bold">
             Follow Us
           </h4>
-          <div className="flex gap-4">
-            <Link href="https://instagram.com/gadgetaura" target="_blank">
-              <Instagram className="w-6 h-6 text-foreground hover:text-yellow-500 transition" />
+          <div className="flex gap-4 items-center">
+            <Link href="https://www.instagram.com/gadgetaura.in_" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 hover:scale-110 transition-all">
+              {/* Instagram official gradient SVG */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-7 h-7">
+                <defs>
+                  <radialGradient id="ig-grad" cx="30%" cy="110%" r="150%">
+                    <stop offset="0%" stopColor="#fdf497" />
+                    <stop offset="10%" stopColor="#fd5949" />
+                    <stop offset="50%" stopColor="#d6249f" />
+                    <stop offset="100%" stopColor="#285AEB" />
+                  </radialGradient>
+                </defs>
+                <rect width="24" height="24" rx="6" fill="url(#ig-grad)" />
+                <rect x="2.5" y="2.5" width="19" height="19" rx="4.5" fill="none" stroke="white" strokeWidth="1.4" />
+                <circle cx="12" cy="12" r="4.5" fill="none" stroke="white" strokeWidth="1.4" />
+                <circle cx="17.8" cy="6.2" r="1.1" fill="white" />
+              </svg>
             </Link>
-            <Link href="https://youtube.com/@gadgetaura" target="_blank">
-              <Youtube className="w-6 h-6 text-foreground hover:text-yellow-500 transition" />
+            <Link href="https://www.youtube.com/@gadgetaura-in" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 hover:scale-110 transition-all">
+              {/* YouTube official red SVG */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 h-6">
+                <path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088C19.535 3.6 12 3.6 12 3.6s-7.535 0-9.407.517A3.007 3.007 0 0 0 .505 6.205 31.247 31.247 0 0 0 0 12a31.247 31.247 0 0 0 .505 5.795 3.007 3.007 0 0 0 2.088 2.088C4.465 20.4 12 20.4 12 20.4s7.535 0 9.407-.517a3.007 3.007 0 0 0 2.088-2.088A31.247 31.247 0 0 0 24 12a31.247 31.247 0 0 0-.505-5.795z" fill="#FF0000" />
+                <path d="M9.545 15.568V8.432L15.818 12z" fill="#FFFFFF" />
+              </svg>
             </Link>
           </div>
+
         </div>
       </div>
 

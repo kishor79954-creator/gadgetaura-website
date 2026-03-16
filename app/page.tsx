@@ -232,7 +232,7 @@ function DynamicPremiumStack() {
   ]
 
   return (
-    <section className="py-20 text-foreground overflow-hidden">
+    <section className="py-8 text-foreground overflow-hidden">
       {/* Use real data if available, otherwise placeholders */}
       <VerticalImageStack products={premium.length > 0 ? premium : placeholders} />
     </section>
@@ -257,7 +257,7 @@ export default function LandingPage() {
       <CategorySection />
 
       {/* FEATURED */}
-      <section className="pt-14 pb-12 px-6 relative z-10">
+      <section className="pt-8 pb-6 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-primary text-xs uppercase tracking-[0.4em] mb-2 font-bold">
             Handpicked Perfection
@@ -274,7 +274,7 @@ export default function LandingPage() {
       <DynamicPremiumStack />
 
       {/* SCROLL */}
-      <section className="pt-4 pb-12 overflow-hidden relative z-10">
+      <section className="pt-0 pb-8 overflow-hidden relative z-10">
         <ContainerScroll
           titleComponent={
             <div className="mb-6 px-6 text-center">

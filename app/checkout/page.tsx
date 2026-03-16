@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, ShieldCheck, CreditCard, Truck } from "lucide-react"
@@ -16,6 +16,25 @@ export default function CheckoutPage() {
   const { items, totalPrice } = useCart()
   const { user } = useAuth()
   const router = useRouter()
+
+  // --- AUTH GUARD --- //
+  useEffect(() => {
+    if (user === null) {
+      router.push("/auth?redirect=/checkout")
+    }
+  }, [user, router])
+
+  if (user === undefined) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4 animate-pulse">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-muted-foreground font-medium">Loading checkout...</p>
+        </div>
+      </main>
+    )
+  }
+  // ------------------ //
 
   const COD_ADVANCE = 149
   const [paymentMethod, setPaymentMethod] = useState<"UPI" | "COD">("UPI")

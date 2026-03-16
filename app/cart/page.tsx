@@ -3,10 +3,10 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useCart } from "@/app/context/Cart-Context"
+import { useAuth } from "@/app/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Trash2, ShoppingBag, ArrowRight } from "lucide-react"
 import { useEffect, useState } from "react"
-import { supabase } from "@/lib/supabaseClient"
 import { useRouter } from "next/navigation"
 
 // Currency Helper
@@ -22,18 +22,9 @@ const FREE_SHIPPING_THRESHOLD = 999;
 
 export default function CartPage() {
   const { items, removeFromCart, totalPrice } = useCart()
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const { user } = useAuth()
+  const loading = user === undefined
   const router = useRouter()
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setUser(session?.user || null)
-      setLoading(false)
-    }
-    checkUser()
-  }, [])
 
   if (items.length === 0) {
     return (
