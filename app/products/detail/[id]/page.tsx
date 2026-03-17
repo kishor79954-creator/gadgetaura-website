@@ -113,10 +113,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         {/* RIGHT: Product Details */}
         <div className="space-y-8">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <h2 className={`font-bold tracking-widest uppercase text-xs ${currentStock > 0 ? "text-green-500" : "text-red-500"}`}>
-                {currentStock > 0 ? "In Stock" : "Out of Stock"}
-              </h2>
+            <div className="flex items-center justify-end mb-2">
               <div className="flex gap-2">
                 <Button
                   variant="ghost"
@@ -206,7 +203,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               disabled={currentStock <= 0}
               className="flex-1 h-14 text-base lg:text-lg rounded-xl border-primary/20 hover:bg-primary/5 text-primary"
             >
-              <ShoppingCart className="mr-2 h-5 w-5" /> {currentStock > 0 ? "Add to Cart" : "Out of Stock"}
+              <ShoppingCart className="mr-2 h-5 w-5" /> {currentStock > 0 ? "Add to Cart" : "Unavailable"}
             </Button>
             <Button
               variant="cta"
