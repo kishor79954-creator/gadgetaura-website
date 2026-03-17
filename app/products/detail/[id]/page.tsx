@@ -237,6 +237,32 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
         </div>
       </div>
+
+      {/* SEO: JSON-LD Structured Data for Google Rich Snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            name: product.name,
+            image: product.allImages || [product.image_url],
+            description: product.description || "Premium Gadget from GadgetAura",
+            brand: {
+              "@type": "Brand",
+              name: "GadgetAura",
+            },
+            offers: {
+              "@type": "Offer",
+              url: `https://www.gadgetaura.in/products/detail/${product.id}`,
+              priceCurrency: "INR",
+              price: product.price,
+              availability: currentStock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+              itemCondition: "https://schema.org/NewCondition",
+            },
+          }),
+        }}
+      />
     </div>
   )
 }

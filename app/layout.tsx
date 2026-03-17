@@ -9,6 +9,7 @@ import { CartProvider } from "./context/Cart-Context"
 import { WishlistProvider } from "./context/WishlistContext"
 import { EtheralShadowClient } from "@/components/ui/etheral-shadow-client"
 import { PageTransitionLoader } from "@/components/ui/page-transition-loader"
+import { CookieConsent } from "@/components/cookie-consent"
 
 
 export const metadata: Metadata = {
@@ -86,7 +87,8 @@ export default function RootLayout({
           </AuthProvider>
         </ThemeProvider>
 
-        {/* Global Loading Overlay */}
+        {/* Global Components */}
+        <CookieConsent />
         <PageTransitionLoader />
       </body>
     </html>

@@ -2,57 +2,12 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 import { LayoutDashboard, Package, ShoppingCart, Users, Settings, ShieldAlert } from "lucide-react"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { supabase } from "@/lib/supabaseClient"
-
-// 🔒 Only this email can access the admin panel
-const ADMIN_EMAIL = "kishor79954@gmail.com"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
-  const [authStatus, setAuthStatus] = useState<"loading" | "allowed" | "denied">("loading")
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      const email = data.user?.email
-      if (email === ADMIN_EMAIL) {
-        setAuthStatus("allowed")
-      } else {
-        setAuthStatus("denied")
-      }
-    })
-  }, [])
-
-  // Show loading spinner while checking
-  if (authStatus === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
-  }
-
-  // Block access — redirect non-admins
-  if (authStatus === "denied") {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-6 text-center px-6">
-        <ShieldAlert className="w-16 h-16 text-destructive" />
-        <h1 className="text-2xl font-bold text-foreground">Access Denied</h1>
-        <p className="text-muted-foreground text-sm max-w-sm">
-          You don't have permission to access the admin panel. This area is restricted to authorised users only.
-        </p>
-        <Link
-          href="/"
-          className="mt-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl text-sm font-bold hover:opacity-90 transition"
-        >
-          Go back home
-        </Link>
-      </div>
-    )
-  }
 
   const navItems = [
     { icon: LayoutDashboard, label: "Overview", href: "/admin" },
