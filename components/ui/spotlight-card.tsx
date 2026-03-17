@@ -41,19 +41,22 @@ const GlowCard: React.FC<GlowCardProps> = ({
 }) => {
   const cardRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const syncPointer = (e: PointerEvent) => {
-      const { clientX: x, clientY: y } = e
-      if (cardRef.current) {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    // Calculate position relative to the element, not the whole document
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    
+    // Request animation frame ensures we don't trigger style recalculations faster than 60fps
+    requestAnimationFrame(() => {
+        if (!cardRef.current) return
         cardRef.current.style.setProperty("--x", x.toFixed(2))
-        cardRef.current.style.setProperty("--xp", (x / window.innerWidth).toFixed(2))
+        cardRef.current.style.setProperty("--xp", (x / rect.width).toFixed(2))
         cardRef.current.style.setProperty("--y", y.toFixed(2))
-        cardRef.current.style.setProperty("--yp", (y / window.innerHeight).toFixed(2))
-      }
-    }
-    document.addEventListener("pointermove", syncPointer)
-    return () => document.removeEventListener("pointermove", syncPointer)
-  }, [])
+        cardRef.current.style.setProperty("--yp", (y / rect.height).toFixed(2))
+    })
+  }
 
   const config = glowColorMap[glowColor as keyof typeof glowColorMap] || glowColorMap.blue
   const { base, spread } = config
@@ -118,6 +121,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
       <div
         ref={cardRef}
         data-glow
+        onPointerMove={handlePointerMove}
         style={getInlineStyles()}
         className={cn(
           customSize ? "" : sizeMap[size],

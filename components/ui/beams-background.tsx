@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface AnimatedGradientBackgroundProps {
@@ -46,6 +47,7 @@ export function BeamsBackground({
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const beamsRef = useRef<Beam[]>([]);
     const animationFrameRef = useRef<number>(0);
+    const isInView = useInView(canvasRef, { margin: "200px" });
     const MINIMUM_BEAMS = 20;
 
     const opacityMap = {
@@ -153,7 +155,11 @@ export function BeamsBackground({
             animationFrameRef.current = requestAnimationFrame(animate);
         }
 
-        animate();
+        if (isInView) {
+            animate();
+        } else if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+        }
 
         return () => {
             window.removeEventListener("resize", updateCanvasSize);
@@ -161,7 +167,7 @@ export function BeamsBackground({
                 cancelAnimationFrame(animationFrameRef.current);
             }
         };
-    }, [intensity]);
+    }, [intensity, isInView]);
 
     return (
         <div

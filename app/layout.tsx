@@ -8,11 +8,43 @@ import { AuthProvider } from "./context/AuthContext"
 import { CartProvider } from "./context/Cart-Context"
 import { WishlistProvider } from "./context/WishlistContext"
 import { EtheralShadowClient } from "@/components/ui/etheral-shadow-client"
+import { PageTransitionLoader } from "@/components/ui/page-transition-loader"
 
 
 export const metadata: Metadata = {
-  title: "Gadgetura",
-  description: "Premium gadgets store",
+  metadataBase: new URL("https://www.gadgetaura.in"),
+  title: {
+    default: "GadgetAura | Premium Gadgets Store",
+    template: "%s | GadgetAura",
+  },
+  description: "Discover the latest premium gadgets, electronics, and accessories at GadgetAura. Compare products and shop with confidence.",
+  keywords: ["gadgets", "electronics", "premium tech", "tech accessories", "GadgetAura", "mobile", "laptops", "smartwatches"],
+  authors: [{ name: "GadgetAura" }],
+  creator: "GadgetAura",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://www.gadgetaura.in",
+    title: "GadgetAura | Premium Gadgets Store",
+    description: "Discover the latest premium gadgets, electronics, and accessories at GadgetAura.",
+    siteName: "GadgetAura",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GadgetAura | Premium Gadgets Store",
+    description: "Discover the latest premium gadgets, electronics, and accessories at GadgetAura.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export default function RootLayout({
@@ -53,6 +85,9 @@ export default function RootLayout({
             </WishlistProvider>
           </AuthProvider>
         </ThemeProvider>
+
+        {/* Global Loading Overlay */}
+        <PageTransitionLoader />
       </body>
     </html>
   )

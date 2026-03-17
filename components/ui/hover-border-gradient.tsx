@@ -62,14 +62,10 @@ export function HoverBorderGradient({
     const highlightLight =
         "radial-gradient(75% 181.15942028985506% at 50% 50%, #3275F8 0%, rgba(0, 0, 0, 0) 100%)"
 
-    useEffect(() => {
-        if (!hovered) {
-            const interval = setInterval(() => {
-                setDirection((prevState) => rotateDirection(prevState))
-            }, duration * 1000)
-            return () => clearInterval(interval)
-        }
-    }, [hovered])
+    // REMOVED: Incessant rotation interval when not hovered. 
+    // Constantly rotating thousands of gradients across grid items spiked CPU usage.
+    // The gradient will simply glow/follow on hover instead.
+
     return (
         <Element
             onMouseEnter={() => setHovered(true)}

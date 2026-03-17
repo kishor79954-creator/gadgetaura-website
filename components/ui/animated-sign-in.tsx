@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Eye, EyeOff, Sun, Moon } from "lucide-react"
 import { useTheme } from "next-themes"
+import { useInView } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -99,6 +100,8 @@ const AnimatedSignIn: React.FC = () => {
     }
 
     // ── Particle Animation ─────────────────────────────────────────
+    const isInView = useInView(canvasRef, { margin: "200px" })
+
     useEffect(() => {
         if (!mounted) return
         const canvas = canvasRef.current
@@ -147,14 +150,22 @@ const AnimatedSignIn: React.FC = () => {
             if (!ctx) return
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             for (const p of particles) { p.update(); p.draw() }
-            animationFrameId = requestAnimationFrame(animate)
+            
+            // Only continue the loop if the component is in view
+            if (isInView) {
+                animationFrameId = requestAnimationFrame(animate)
+            }
         }
-        animate()
+
+        if (isInView) {
+            animate()
+        }
+
         return () => {
             window.removeEventListener("resize", setCanvasSize)
             cancelAnimationFrame(animationFrameId)
         }
-    }, [mounted, resolvedTheme])
+    }, [mounted, resolvedTheme, isInView])
 
     if (!mounted) return null
     const isDark = resolvedTheme === "dark"

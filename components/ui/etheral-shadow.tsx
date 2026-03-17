@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useRef, useId, useEffect, type CSSProperties } from "react"
-import { animate, useMotionValue, type AnimationPlaybackControls } from "framer-motion"
+import { animate, useMotionValue, useInView, type AnimationPlaybackControls } from "framer-motion"
 
 // Type definitions
 interface ResponsiveImage {
@@ -63,6 +63,9 @@ export function EtheralShadow({
     className,
 }: ShadowOverlayProps) {
     const id = useInstanceId()
+    const containerRef = useRef<HTMLDivElement>(null)
+    const isInView = useInView(containerRef, { margin: "200px" })
+    
     const animationEnabled = animation && animation.scale > 0
     const feColorMatrixRef = useRef<SVGFEColorMatrixElement>(null)
     const hueRotateMotionValue = useMotionValue(180)
@@ -74,8 +77,14 @@ export function EtheralShadow({
     useEffect(() => {
         if (feColorMatrixRef.current && animationEnabled) {
             if (hueRotateAnimation.current) {
-                hueRotateAnimation.current.stop()
+                if (isInView) {
+                    hueRotateAnimation.current.play()
+                } else {
+                    hueRotateAnimation.current.pause()
+                }
+                return;
             }
+
             hueRotateMotionValue.set(0)
             hueRotateAnimation.current = animate(hueRotateMotionValue, 360, {
                 duration: animationDuration / 25,
@@ -91,16 +100,23 @@ export function EtheralShadow({
                 },
             })
 
+            // Initial play/pause state
+            if (!isInView) {
+                hueRotateAnimation.current.pause()
+            }
+
             return () => {
                 if (hueRotateAnimation.current) {
                     hueRotateAnimation.current.stop()
+                    hueRotateAnimation.current = null
                 }
             }
         }
-    }, [animationEnabled, animationDuration, hueRotateMotionValue])
+    }, [animationEnabled, animationDuration, hueRotateMotionValue, isInView])
 
     return (
         <div
+            ref={containerRef}
             className={className}
             style={{
                 overflow: "hidden",

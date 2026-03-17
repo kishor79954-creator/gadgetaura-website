@@ -17,25 +17,6 @@ export default function CheckoutPage() {
   const { user } = useAuth()
   const router = useRouter()
 
-  // --- AUTH GUARD --- //
-  useEffect(() => {
-    if (user === null) {
-      router.push("/auth?redirect=/checkout")
-    }
-  }, [user, router])
-
-  if (user === undefined) {
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4 animate-pulse">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-muted-foreground font-medium">Loading checkout...</p>
-        </div>
-      </main>
-    )
-  }
-  // ------------------ //
-
   const COD_ADVANCE = 149
   const [paymentMethod, setPaymentMethod] = useState<"UPI" | "COD">("UPI")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -54,9 +35,28 @@ export default function CheckoutPage() {
   const [stateName, setStateName] = useState("")
   const [pincode, setPincode] = useState("")
 
+  // --- AUTH GUARD --- //
+  useEffect(() => {
+    if (user === null) {
+      router.push("/auth?redirect=/checkout")
+    }
+  }, [user, router])
+
   // Calculations
   const payNow = paymentMethod === "UPI" ? totalPrice : COD_ADVANCE
   const payOnDelivery = paymentMethod === "COD" ? totalPrice - COD_ADVANCE : 0
+
+  if (user === undefined) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4 animate-pulse">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-muted-foreground font-medium">Loading checkout...</p>
+        </div>
+      </main>
+    )
+  }
+  // ------------------ //
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -108,6 +108,23 @@ export default function CheckoutPage() {
 
       const { error: itemsError } = await supabase.from("order_items").insert(orderItems)
       if (itemsError) throw new Error("Items creation failed: " + itemsError.message)
+
+      // 3.5 Dispatch Email Notification to Admin
+      try {
+        await fetch("/api/notify-admin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+             orderId: orderData.id,
+             customerName: `${firstName} ${lastName}`,
+             customerEmail: email,
+             totalAmount: totalPrice,
+             items: orderItems
+          })
+        });
+      } catch (notifyErr) {
+        console.error("Failed to notify admin, but order succeeded:", notifyErr);
+      }
 
       // 4. Success!
       localStorage.removeItem("cart")

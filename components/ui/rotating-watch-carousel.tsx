@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState } from "react"
+import Image from "next/image"
 
 type Props = {
   watchImages: string[]
@@ -26,14 +27,19 @@ export function RotatingWatchCarousel({
     return () => clearInterval(interval)
   }, [autoRotate, watchImages.length, rotationInterval])
 
+  const MotionImage = motion(Image)
+
   return (
     <div className="relative aspect-[3/5] w-full flex items-center justify-center overflow-hidden" style={{ perspective: "1000px" }}>
       <AnimatePresence initial={false}>
-        <motion.img
+        <MotionImage
           key={index}
           src={watchImages[index]}
           alt="Luxury Watch"
-          className="absolute w-full h-full object-contain select-none"
+          fill
+          sizes="(max-width: 768px) 100vw, 500px"
+          quality={75}
+          className="object-contain select-none"
           initial={{
             rotateY: -180,
             scale: 0.8,

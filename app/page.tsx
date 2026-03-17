@@ -47,8 +47,10 @@ const VerticalImageStack = dynamic(
 )
 
 import { supabase } from "@/lib/supabaseClient"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import type { StackProduct } from "@/components/ui/vertical-image-stack"
+
+import { useInView } from "framer-motion"
 
 type FeaturedProduct = {
   id: string
@@ -244,7 +246,7 @@ function DynamicPremiumStack() {
 
 
 export default function LandingPage() {
-
+  const heroVideoRef = useRef<HTMLVideoElement>(null)
 
   return (
     <main className="min-h-screen relative">
@@ -288,8 +290,9 @@ export default function LandingPage() {
             </div>
           }
         >
-          <div className="w-full h-full bg-card relative rounded-2xl overflow-hidden border border-border shadow-xl">
+          <div className="w-full h-full bg-black relative rounded-2xl overflow-hidden border border-border shadow-xl">
             <video
+              ref={heroVideoRef}
               className="w-full h-full object-cover"
               autoPlay
               loop

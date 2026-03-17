@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useRef, useEffect } from "react"
+import { motion, AnimatePresence, useInView } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
@@ -17,14 +17,28 @@ const videos = [
 
 export function LandingVideo() {
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
+    const containerRef = useRef<HTMLDivElement>(null)
     const videoRef = useRef<HTMLVideoElement>(null)
+    const isInView = useInView(containerRef, { margin: "200px" })
+
+    useEffect(() => {
+        if (videoRef.current) {
+            if (isInView) {
+                if (videoRef.current.paused) {
+                    videoRef.current.play().catch(() => {})
+                }
+            } else {
+                videoRef.current.pause()
+            }
+        }
+    }, [isInView, currentVideoIndex]) // Re-run effect if the video index changes because the ref element changes
 
     const handleVideoEnd = () => {
         setCurrentVideoIndex((prev) => (prev + 1) % videos.length)
     }
 
     return (
-        <div className="relative w-full h-screen overflow-hidden" style={{ maskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)" }}>
+        <div ref={containerRef} className="relative w-full h-screen overflow-hidden" style={{ maskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)" }}>
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentVideoIndex}

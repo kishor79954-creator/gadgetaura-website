@@ -83,7 +83,7 @@ export default function OrdersPage() {
 
   if (loading) {
     return (
-      <main className="pt-40 text-center text-muted-foreground">
+      <main className="pt-40 text-center text-muted-foreground bg-background">
         Loading your orders...
       </main>
     )
@@ -91,7 +91,7 @@ export default function OrdersPage() {
 
   if (orders.length === 0) {
     return (
-      <main className="pt-40 pb-24 px-6 min-h-screen flex flex-col items-center text-center">
+      <main className="pt-40 pb-24 px-6 min-h-screen flex flex-col items-center text-center bg-background text-foreground">
         <PackageSearch className="w-20 h-20 text-primary mb-6" />
         <h1 className="text-3xl font-bold mb-3">No Orders Yet</h1>
         <p className="text-muted-foreground mb-8 max-w-md">
@@ -109,7 +109,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <main className="pt-32 pb-24 px-6 min-h-screen">
+    <main className="pt-32 pb-24 px-6 min-h-screen bg-background text-foreground transition-colors duration-300">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold mb-10">My Orders</h1>
 
@@ -118,7 +118,7 @@ export default function OrdersPage() {
             <Link
               key={order.id}
               href={`/orders/${order.id}`}
-              className="block border border-white/10 rounded-xl p-6 hover:border-primary transition"
+              className="block border border-border rounded-xl p-6 hover:border-primary transition bg-card text-card-foreground shadow-sm"
             >
               <div className="flex justify-between items-center gap-6">
                 <div>

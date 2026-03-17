@@ -21,8 +21,9 @@ export const ContainerScroll = ({
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  const rotate = useTransform(scrollYProgress, [0, 1], [20, 0])
-  const scale = useTransform(scrollYProgress, [0, 1], isMobile ? [0.8, 0.95] : [1.1, 1])
+  // Removing rotateX transform as animating 3D textures of a playing video causes extreme render lag
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 0])
+  const scale = useTransform(scrollYProgress, [0, 1], isMobile ? [0.8, 0.95] : [1.1, 0.95])
   const translate = useTransform(scrollYProgress, [0, 1], [0, -100])
 
   return (

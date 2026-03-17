@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect, useRef } from "react"
 import { motion, type PanInfo } from "framer-motion"
-import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -176,14 +175,14 @@ export function VerticalImageStack({ products }: VerticalImageStackProps) {
                                     )}
 
                                     {product.image_url ? (
-                                        <Image
-                                            src={product.image_url}
-                                            alt={product.name}
-                                            fill
-                                            className="object-cover w-full h-full"
-                                            draggable={false}
-                                            priority={isCurrent}
-                                        />
+                                        <div className="absolute inset-0 z-0">
+                                            <img
+                                                src={product.image_url}
+                                                alt={product.name}
+                                                className="object-cover w-full h-full"
+                                                draggable={false}
+                                            />
+                                        </div>
                                     ) : (
                                         <div className="w-full h-full bg-muted flex items-center justify-center text-5xl">💎</div>
                                     )}
