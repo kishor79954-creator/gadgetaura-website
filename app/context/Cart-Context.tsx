@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react"
 
 // Define the shape of a Cart Item
 export type CartItem = {
@@ -47,7 +47,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items])
 
-  const addToCart = (product: any) => {
+  const addToCart = useCallback((product: any) => {
     setItems((prev) => {
       const existing = prev.find((item) => item.id === product.id)
 
@@ -72,13 +72,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         quantity: 1
       }]
     })
-  }
+  }, [])
 
-  const removeFromCart = (id: string) => {
+  const removeFromCart = useCallback((id: string) => {
     setItems((prev) => prev.filter((item) => item.id !== id))
-  }
+  }, [])
 
-  const buyNow = (product: any) => {
+  const buyNow = useCallback((product: any) => {
     const imageUrl = product.image_url
       || (product.allImages && product.allImages[0])
       || (product.images && product.images[0])
@@ -93,13 +93,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
 
     setItems([newItem])
-  }
+  }, [])
 
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0)
+  const totalPrice = useMemo(() => items.reduce((sum, item) => sum + item.price * item.quantity, 0), [items])
+  const cartCount = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items])
+
+  const value = useMemo(() => ({
+    items,
+    addToCart,
+    removeFromCart,
+    buyNow,
+    totalPrice,
+    cartCount
+  }), [items, addToCart, removeFromCart, buyNow, totalPrice, cartCount])
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, buyNow, totalPrice, cartCount }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   )
