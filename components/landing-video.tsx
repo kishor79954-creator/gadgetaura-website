@@ -7,17 +7,16 @@ import { InfiniteSlider } from "@/components/ui/infinite-slider"
 
 
 export function LandingVideo() {
-    const videoRef = useRef<HTMLVideoElement>(null)
 
     return (
         <div className="relative w-full h-screen overflow-hidden" style={{ maskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)" }}>
             <video
-                ref={videoRef}
                 src="/landing/vid1.mp4"
                 autoPlay
                 loop
                 muted
                 playsInline
+                preload="auto"
                 className="absolute inset-0 w-full h-full object-cover"
             />
 

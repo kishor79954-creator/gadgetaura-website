@@ -6,10 +6,7 @@ import { ShoppingCart } from "lucide-react"
 
 // ─── Heavy components: lazy-loaded so they DON'T block first paint ───────────
 
-const LandingVideo = dynamic(
-  () => import("@/components/landing-video").then(m => m.LandingVideo),
-  { ssr: false, loading: () => <div className="w-full h-screen bg-background" /> }
-)
+import { LandingVideo } from "@/components/landing-video"
 
 const CategorySection = dynamic(
   () => import("@/components/landing/category-section").then(m => m.CategorySection),
@@ -46,7 +43,6 @@ const VerticalImageStack = dynamic(
   { ssr: false, loading: () => <div className="h-96 animate-pulse bg-muted rounded-2xl mx-6" /> }
 )
 
-import { useRef } from "react"
 
 const DynamicFeaturedProducts = dynamic(
   () => import("@/components/landing/dynamic-featured-products").then(m => m.DynamicFeaturedProducts),
@@ -63,8 +59,6 @@ const DynamicPremiumStack = dynamic(
 
 
 export default function LandingPage() {
-  const heroVideoRef = useRef<HTMLVideoElement>(null)
-
   return (
     <main className="min-h-screen relative">
       {/* VIDEO SECTION */}
@@ -109,7 +103,6 @@ export default function LandingPage() {
         >
           <div className="w-full h-full bg-black relative rounded-2xl overflow-hidden border border-border shadow-xl">
             <video
-              ref={heroVideoRef}
               className="w-full h-full object-cover"
               autoPlay
               loop
