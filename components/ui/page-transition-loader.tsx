@@ -133,7 +133,7 @@ export function PageTransitionLoader() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-background/80 backdrop-blur-md flex flex-col items-center justify-center pointer-events-none"
+            className="fixed inset-0 z-[9999] bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center pointer-events-none"
           >
             <div className="flex flex-col items-center justify-center">
               <InfinitySpinner />
