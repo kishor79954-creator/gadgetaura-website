@@ -1,8 +1,6 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
-// Fallback key prevents Next.js from crashing during the Vercel build phase
-const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_fallback_key');
 
 export async function POST(req: Request) {
   try {
@@ -24,6 +22,8 @@ export async function POST(req: Request) {
 
     let emailPromise: any = Promise.resolve();
     if (process.env.RESEND_API_KEY) {
+      // Instantiate inside the function so it's never evaluated at build time
+      const resend = new Resend(process.env.RESEND_API_KEY);
       emailPromise = resend.emails.send({
         from: 'Acme <onboarding@resend.dev>', // Verified domain is required for production
         to: adminEmail || 'fallback@example.com',
