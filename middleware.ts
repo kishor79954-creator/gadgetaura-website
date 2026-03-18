@@ -44,7 +44,7 @@ export async function middleware(req: NextRequest) {
     // A. Not Logged In
     if (!session) {
       const redirectUrl = req.nextUrl.clone()
-      redirectUrl.pathname = '/login'
+      redirectUrl.pathname = '/auth'
       redirectUrl.searchParams.set(`redirectedFrom`, path)
       return NextResponse.redirect(redirectUrl)
     }
