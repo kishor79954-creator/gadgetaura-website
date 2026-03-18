@@ -1,24 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
 
+// CSS-only Mobile vs Desktop strategy:
+// - Video is shown only on md+ (≥768px) via `hidden md:block`
+// - Poster image is shown only on <768px via `block md:hidden`
+// This avoids any JS/useEffect delay — both assets are rendered immediately in HTML.
+// The browser picks which to display based on screen size without waiting for hydration.
+
 export function LandingVideo() {
-    const [isDesktop, setIsDesktop] = useState(false)
-
-    useEffect(() => {
-        // Only autoplay video on desktop (768px+). Mobile gets a static image
-        // that shows instantly instead of waiting 10-30s for a 5MB video to buffer.
-        const mq = window.matchMedia("(min-width: 768px)")
-        setIsDesktop(mq.matches)
-        const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
-        mq.addEventListener("change", handler)
-        return () => mq.removeEventListener("change", handler)
-    }, [])
-
     return (
         <div
             className="relative w-full h-screen overflow-hidden bg-black"
@@ -27,29 +19,25 @@ export function LandingVideo() {
                 WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)"
             }}
         >
-            {/* Desktop: autoplay video */}
-            {isDesktop ? (
-                <video
-                    src="/landing/vid1.mp4"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="auto"
-                    poster="/landing/poster.jpg"
-                    className="absolute inset-0 w-full h-full object-cover"
-                />
-            ) : (
-                /* Mobile: static poster image — loads in <1 second vs 30 seconds for video */
-                <Image
-                    src="/landing/poster.jpg"
-                    alt="GadgetAura Premium Gadgets"
-                    fill
-                    priority
-                    className="object-cover"
-                    sizes="100vw"
-                />
-            )}
+            {/* Desktop (md+): Autoplay video */}
+            <video
+                src="/landing/vid1.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                poster="/landing/poster.jpg"
+                className="absolute inset-0 w-full h-full object-cover hidden md:block"
+            />
+
+            {/* Mobile (<md): Static poster image — shows instantly, no download wait */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+                src="/landing/poster.jpg"
+                alt="GadgetAura Premium Gadgets"
+                className="absolute inset-0 w-full h-full object-cover block md:hidden"
+            />
 
             {/* Dark Overlay for readability */}
             <div className="absolute inset-0 bg-black/50 pointer-events-none" />
@@ -62,26 +50,12 @@ export function LandingVideo() {
 
                 <div className="flex flex-col sm:flex-row gap-4">
                     <Link href="/products?category=watches">
-                        <button
-                            className="
-                relative px-8 py-4 rounded-full
-                bg-white/10 backdrop-blur-xl
-                border border-white/20
-                text-sm font-bold uppercase tracking-widest
-                text-white
-                hover:bg-white/20 hover:border-white/40 hover:scale-105
-                transition-all duration-300
-                shadow-lg shadow-black/30
-                "
-                        >
+                        <button className="relative px-8 py-4 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-sm font-bold uppercase tracking-widest text-white hover:bg-white/20 hover:border-white/40 hover:scale-105 transition-all duration-300 shadow-lg shadow-black/30">
                             Shop Watches
                         </button>
                     </Link>
                     <Link href="/products">
-                        <Button
-                            variant="default"
-                            className="px-8 py-7 rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform"
-                        >
+                        <Button variant="default" className="px-8 py-7 rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform">
                             View Collection
                         </Button>
                     </Link>
@@ -92,36 +66,15 @@ export function LandingVideo() {
             <div className="absolute bottom-0 left-0 w-full z-20 bg-gradient-to-t from-black/90 to-transparent pb-8 pt-12">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row items-center gap-8">
-                        {/* TRUSTED TEXT */}
                         <div className="hidden md:block md:w-48 border-r border-white/20 pr-6 text-right">
                             <p className="text-[10px] uppercase tracking-widest font-bold text-[#D4AF37]">
                                 Trusted by Connoisseurs
                             </p>
                         </div>
-
-                        {/* SCROLLING BRANDS */}
                         <div className="w-full overflow-hidden">
                             <InfiniteSlider duration={40} gap={80}>
-                                {[
-                                    "Rolex",
-                                    "Patek Philippe",
-                                    "Audemars Piguet",
-                                    "Omega",
-                                    "Cartier",
-                                    "Fossil",
-                                    "Armani Exchange",
-                                    "Emporio Armani",
-                                    "Boat",
-                                    "JBL",
-                                    "Marshall",
-                                    "Apple",
-                                    "Samsung",
-                                    "Sony"
-                                ].map((brand) => (
-                                    <div
-                                        key={brand}
-                                        className="text-xl md:text-2xl font-serif font-bold text-white/40 uppercase tracking-[0.3em] whitespace-nowrap"
-                                    >
+                                {["Rolex", "Patek Philippe", "Audemars Piguet", "Omega", "Cartier", "Fossil", "Armani Exchange", "Emporio Armani", "Boat", "JBL", "Marshall", "Apple", "Samsung", "Sony"].map((brand) => (
+                                    <div key={brand} className="text-xl md:text-2xl font-serif font-bold text-white/40 uppercase tracking-[0.3em] whitespace-nowrap">
                                         {brand}
                                     </div>
                                 ))}
