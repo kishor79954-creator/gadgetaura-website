@@ -34,15 +34,15 @@ export async function middleware(req: NextRequest) {
 
   // Refresh user session if expired
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
   const path = req.nextUrl.pathname
 
   // 1. ADMIN ROUTE PROTECTION
   if (ADMIN_PATHS.test(path)) {
     // A. Not Logged In
-    if (!session) {
+    if (!user) {
       const redirectUrl = req.nextUrl.clone()
       redirectUrl.pathname = '/auth'
       redirectUrl.searchParams.set(`redirectedFrom`, path)
@@ -51,7 +51,7 @@ export async function middleware(req: NextRequest) {
 
     // B. Logged in, but NOT the admin email
     const ADMIN_EMAIL = "kishor79954@gmail.com"
-    if (session.user.email !== ADMIN_EMAIL) {
+    if (user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
       // Return them to homepage if they have no business in admin
       const redirectUrl = req.nextUrl.clone()
       redirectUrl.pathname = '/'
