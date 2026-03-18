@@ -54,10 +54,12 @@ const AnimatedSignIn: React.FC = () => {
         setGoogleLoading(true)
         setError(null)
         try {
+            const params = new URLSearchParams(window.location.search)
+            const from = params.get("redirectedFrom") || "/admin"
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
+                    redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(from)}`,
                 },
             })
             if (error) throw error
