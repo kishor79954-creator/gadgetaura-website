@@ -108,8 +108,9 @@ export default function LandingPage() {
               loop
               muted
               playsInline
+              preload="none"
             >
-              <source src="/hero-video.mp4" type="video/mp4" />
+              <source src="/landing/scrollpanevideo.mp4" type="video/mp4" />
             </video>
 
             {/* SAFE OVERLAY */}
