@@ -1,7 +1,8 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Fallback key prevents Next.js from crashing during the Vercel build phase
+const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_fallback_key');
 
 export async function POST(req: Request) {
   try {
@@ -21,24 +22,29 @@ export async function POST(req: Request) {
         itemsListHtml = items.map((item: any) => `<li>${item.quantity}x ${item.product_name} - ₹${item.price}</li>`).join('');
     }
 
-    const emailPromise = resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>', // Verified domain is required for production
-      to: adminEmail || 'fallback@example.com',
-      subject: subject,
-      html: `
-        <div style="font-family: sans-serif; padding: 20px;">
-          <h2 style="color: #333;">New Order Alert 🛒</h2>
-          <p><strong>Order ID:</strong> ${orderId}</p>
-          <p><strong>Customer Name:</strong> ${customerName}</p>
-          <p><strong>Customer Email:</strong> ${customerEmail}</p>
-          <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
-          ${itemsListHtml ? `<h3>Order Items:</h3><ul>${itemsListHtml}</ul>` : ''}
-          <p style="margin-top: 30px; font-size: 12px; color: #888;">
-            Log in to your dashboard to view full details.
-          </p>
-        </div>
-      `,
-    });
+    let emailPromise: any = Promise.resolve();
+    if (process.env.RESEND_API_KEY) {
+      emailPromise = resend.emails.send({
+        from: 'Acme <onboarding@resend.dev>', // Verified domain is required for production
+        to: adminEmail || 'fallback@example.com',
+        subject: subject,
+        html: `
+          <div style="font-family: sans-serif; padding: 20px;">
+            <h2 style="color: #333;">New Order Alert 🛒</h2>
+            <p><strong>Order ID:</strong> ${orderId}</p>
+            <p><strong>Customer Name:</strong> ${customerName}</p>
+            <p><strong>Customer Email:</strong> ${customerEmail}</p>
+            <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
+            ${itemsListHtml ? `<h3>Order Items:</h3><ul>${itemsListHtml}</ul>` : ''}
+            <p style="margin-top: 30px; font-size: 12px; color: #888;">
+              Log in to your dashboard to view full details.
+            </p>
+          </div>
+        `,
+      });
+    } else {
+      console.warn("Email notification skipped: Missing RESEND_API_KEY environment variable.");
+    }
 
     // 2. Prepare WhatsApp Promise (using Twilio as the easiest Developer implementation)
     // To activate this, the user needs to add these 3 variables to .env.local
