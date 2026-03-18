@@ -1,27 +1,58 @@
 "use client"
 
+import { useState, useEffect } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
 
-
 export function LandingVideo() {
+    const [isDesktop, setIsDesktop] = useState(false)
+
+    useEffect(() => {
+        // Only autoplay video on desktop (768px+). Mobile gets a static image
+        // that shows instantly instead of waiting 10-30s for a 5MB video to buffer.
+        const mq = window.matchMedia("(min-width: 768px)")
+        setIsDesktop(mq.matches)
+        const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+        mq.addEventListener("change", handler)
+        return () => mq.removeEventListener("change", handler)
+    }, [])
 
     return (
-        <div className="relative w-full h-screen overflow-hidden" style={{ maskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)" }}>
-            <video
-                src="/landing/vid1.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-                poster="/landing/poster.jpg"
-                className="absolute inset-0 w-full h-full object-cover"
-            />
+        <div
+            className="relative w-full h-screen overflow-hidden bg-black"
+            style={{
+                maskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)"
+            }}
+        >
+            {/* Desktop: autoplay video */}
+            {isDesktop ? (
+                <video
+                    src="/landing/vid1.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    poster="/landing/poster.jpg"
+                    className="absolute inset-0 w-full h-full object-cover"
+                />
+            ) : (
+                /* Mobile: static poster image — loads in <1 second vs 30 seconds for video */
+                <Image
+                    src="/landing/poster.jpg"
+                    alt="GadgetAura Premium Gadgets"
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="100vw"
+                />
+            )}
 
             {/* Dark Overlay for readability */}
-            <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+            <div className="absolute inset-0 bg-black/50 pointer-events-none" />
 
             {/* HERO CONTENT OVERLAY */}
             <div className="absolute inset-0 flex flex-col items-center justify-end text-center z-10 px-4 pb-24">
