@@ -88,7 +88,9 @@ const AnimatedSignIn: React.FC = () => {
                 } else {
                     const { error } = await supabase.auth.signInWithPassword({ email, password })
                     if (error) throw error
-                    router.push("/")
+                    const params = new URLSearchParams(window.location.search)
+                    const from = params.get("redirectedFrom") || "/"
+                    router.push(from)
                     router.refresh()
                 }
             } catch (err: any) {
