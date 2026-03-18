@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -8,11 +8,6 @@ import { InfiniteSlider } from "@/components/ui/infinite-slider"
 
 const videos = [
     "/landing/vid1.mp4",
-    "/landing/vid2.mp4",
-    "/landing/vid3.mp4",
-    "/landing/vid4.mp4",
-    "/landing/vid5.mp4",
-    "/landing/vid6.mp4",
 ]
 
 export function LandingVideo() {
