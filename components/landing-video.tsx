@@ -4,11 +4,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
 
-// CSS-only Mobile vs Desktop strategy:
-// - Video is shown only on md+ (≥768px) via `hidden md:block`
-// - Poster image is shown only on <768px via `block md:hidden`
-// This avoids any JS/useEffect delay — both assets are rendered immediately in HTML.
-// The browser picks which to display based on screen size without waiting for hydration.
+// Video plays automatically on all devices immediately
+// PlaysInline and muted are required for iOS/mobile autoplay
 
 export function LandingVideo() {
     return (
@@ -19,7 +16,7 @@ export function LandingVideo() {
                 WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)"
             }}
         >
-            {/* Desktop (md+): Autoplay video */}
+            {/* Autoplay video for all devices */}
             <video
                 src="/landing/vid1.mp4"
                 autoPlay
@@ -27,16 +24,7 @@ export function LandingVideo() {
                 muted
                 playsInline
                 preload="auto"
-                poster="/landing/poster.jpg"
-                className="absolute inset-0 w-full h-full object-cover hidden md:block"
-            />
-
-            {/* Mobile (<md): Static poster image — shows instantly, no download wait */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-                src="/landing/poster.jpg"
-                alt="GadgetAura Premium Gadgets"
-                className="absolute inset-0 w-full h-full object-cover block md:hidden"
+                className="absolute inset-0 w-full h-full object-cover"
             />
 
             {/* Dark Overlay for readability */}
