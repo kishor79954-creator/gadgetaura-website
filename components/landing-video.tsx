@@ -1,64 +1,25 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence, useInView } from "framer-motion"
+import { useRef } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
 
-const videos = [
-    "/landing/vid1.mp4",
-    "/landing/vid2.mp4",
-    "/landing/vid3.mp4",
-    "/landing/vid4.mp4",
-    "/landing/vid5.mp4",
-    "/landing/vid6.mp4",
-]
 
 export function LandingVideo() {
-    const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
-    const containerRef = useRef<HTMLDivElement>(null)
     const videoRef = useRef<HTMLVideoElement>(null)
-    const isInView = useInView(containerRef, { margin: "200px" })
-
-    useEffect(() => {
-        if (videoRef.current) {
-            if (isInView) {
-                if (videoRef.current.paused) {
-                    videoRef.current.play().catch(() => {})
-                }
-            } else {
-                videoRef.current.pause()
-            }
-        }
-    }, [isInView, currentVideoIndex]) // Re-run effect if the video index changes because the ref element changes
-
-    const handleVideoEnd = () => {
-        setCurrentVideoIndex((prev) => (prev + 1) % videos.length)
-    }
 
     return (
-        <div ref={containerRef} className="relative w-full h-screen overflow-hidden" style={{ maskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)" }}>
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={currentVideoIndex}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1 }}
-                    className="absolute inset-0 w-full h-full"
-                >
-                    <video
-                        ref={videoRef}
-                        src={videos[currentVideoIndex]}
-                        autoPlay
-                        muted
-                        playsInline
-                        className="w-full h-full object-cover"
-                        onEnded={handleVideoEnd}
-                    />
-                </motion.div>
-            </AnimatePresence>
+        <div className="relative w-full h-screen overflow-hidden" style={{ maskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)" }}>
+            <video
+                ref={videoRef}
+                src="/landing/vid1.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+            />
 
             {/* Dark Overlay for readability */}
             <div className="absolute inset-0 bg-black/40 pointer-events-none" />
