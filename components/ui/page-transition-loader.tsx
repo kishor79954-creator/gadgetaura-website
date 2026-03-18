@@ -76,7 +76,8 @@ export function PageTransitionLoader() {
   // we have to patch the browser's history API to know when a push/replace happens.
   useEffect(() => {
     const handleStart = () => {
-      setGlobalLoading(true)
+      // Defer state update to avoid React 'useInsertionEffect must not schedule updates' error
+      setTimeout(() => setGlobalLoading(true), 0)
     }
 
     // Intercept Next.js client-side navigations (which use pushState/replaceState under the hood)
