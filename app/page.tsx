@@ -86,8 +86,8 @@ export default function LandingPage() {
       {/* PREMIUM STACK */}
       <DynamicPremiumStack />
 
-      {/* SCROLL — desktop only to prevent dual-video lag on mobile */}
-      <div className="hidden md:block">
+      {/* SCROLL — Enabled for all devices */}
+      <div className="block">
       <section className="pt-0 pb-8 overflow-hidden relative z-10">
         <ContainerScroll
           titleComponent={
