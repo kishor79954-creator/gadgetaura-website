@@ -1,6 +1,5 @@
 "use client"
 
-import { useRef } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
@@ -17,6 +16,7 @@ export function LandingVideo() {
                 muted
                 playsInline
                 preload="auto"
+                poster="/landing/poster.jpg"
                 className="absolute inset-0 w-full h-full object-cover"
             />
 

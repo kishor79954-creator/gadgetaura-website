@@ -27,6 +27,7 @@ export function VerticalImageStack({ products }: VerticalImageStackProps) {
     const router = useRouter()
 
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [isMobile, setIsMobile] = useState(false)
     const lastNavigationTime = useRef(0)
     const navigationCooldown = 400 // ms between navigations
 
@@ -42,6 +43,14 @@ export function VerticalImageStack({ products }: VerticalImageStackProps) {
             return prev === 0 ? displayProducts.length - 1 : prev - 1
         })
     }, [displayProducts.length])
+
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 767px)")
+        setIsMobile(mq.matches)
+        const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+        mq.addEventListener("change", handler)
+        return () => mq.removeEventListener("change", handler)
+    }, [])
 
     const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
         const threshold = 50
@@ -77,8 +86,13 @@ export function VerticalImageStack({ products }: VerticalImageStackProps) {
         if (diff > total / 2) diff -= total
         if (diff < -total / 2) diff += total
 
-        // Horizontal Stack Logic
-        // swapping y for x, rotateX for rotateY
+        // On mobile: simpler 2D-only animations (no 3D rotateY) to prevent GPU lag
+        if (isMobile) {
+            if (diff === 0) return { x: 0, scale: 1, opacity: 1, zIndex: 5, rotateY: 0 }
+            if (diff === -1) return { x: -200, scale: 0.85, opacity: 0.5, zIndex: 4, rotateY: 0 }
+            if (diff === 1) return { x: 200, scale: 0.85, opacity: 0.5, zIndex: 4, rotateY: 0 }
+            return { x: diff > 0 ? 400 : -400, scale: 0.7, opacity: 0, zIndex: 0, rotateY: 0 }
+        }
 
         if (diff === 0) {
             return { x: 0, scale: 1, opacity: 1, zIndex: 5, rotateY: 0 }
@@ -149,7 +163,7 @@ export function VerticalImageStack({ products }: VerticalImageStackProps) {
                             dragElastic={0.2}
                             onDragEnd={handleDragEnd}
                             style={{
-                                transformStyle: "preserve-3d",
+                                transformStyle: isMobile ? "flat" : "preserve-3d",
                                 zIndex: style.zIndex,
                             }}
                         >
