@@ -130,8 +130,8 @@ export default function CheckoutPage() {
       localStorage.removeItem("cart")
       alert(`Order placed successfully! Order ID: ${orderData.id}`)
 
-      // ✅ REDIRECT TO SUCCESS PAGE
-      router.push(`/checkout/success?orderId=${orderData.id}`)
+      // ✅ REDIRECT TO MY ORDERS PANEL
+      router.push(`/orders`)
 
       // Force refresh to clear cart UI (optional)
       setTimeout(() => window.location.reload(), 500)

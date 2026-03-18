@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { jwtDecode } from "jwt-decode"
 import Image from "next/image"
 import { Package, User, LogOut, Mail, Shield, Calendar, Clock, CheckCircle2, ChevronRight } from "lucide-react"
@@ -27,6 +28,46 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+  const [passwordSuccess, setPasswordSuccess] = useState("")
+  const [updatingPassword, setUpdatingPassword] = useState(false)
+
+  const handleUpdatePassword = async () => {
+    setPasswordError("")
+    setPasswordSuccess("")
+    
+    if (newPassword.length < 6) {
+      setPasswordError("Password must be at least 6 characters")
+      return
+    }
+    
+    if (newPassword !== confirmPassword) {
+      setPasswordError("Passwords do not match")
+      return
+    }
+    
+    setUpdatingPassword(true)
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword
+    })
+    
+    setUpdatingPassword(false)
+    if (error) {
+      setPasswordError(error.message)
+    } else {
+      setPasswordSuccess("Password updated successfully")
+      setNewPassword("")
+      setConfirmPassword("")
+      setTimeout(() => {
+        setIsChangingPassword(false)
+        setPasswordSuccess("")
+      }, 2000)
+    }
+  }
 
   useEffect(() => {
     const load = async () => {
@@ -134,13 +175,69 @@ export default function ProfilePage() {
                 </div>
               </div>
               
-              <Button
-                onClick={handleLogout}
-                variant="destructive"
-                className="w-full mt-8 rounded-xl h-12 font-bold shadow-lg shadow-destructive/20 hover:scale-[1.02] transition-all"
-              >
-                <LogOut className="w-4 h-4 mr-2" /> Sign Out
-              </Button>
+              {!isChangingPassword ? (
+                <div className="space-y-3 mt-6 w-full">
+                  <Button
+                    onClick={() => setIsChangingPassword(true)}
+                    variant="outline"
+                    className="w-full rounded-xl h-11 font-medium transition-all"
+                  >
+                    Change Password
+                  </Button>
+                  <Button
+                    onClick={handleLogout}
+                    variant="destructive"
+                    className="w-full rounded-xl h-11 font-bold shadow-lg shadow-destructive/20 hover:scale-[1.02] transition-all"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" /> Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <div className="w-full space-y-4 mt-6 p-4 border border-border rounded-2xl bg-secondary/20 text-left">
+                  <h3 className="font-bold text-sm">Change Password</h3>
+                  <div className="space-y-3">
+                    <Input 
+                      type="password" 
+                      placeholder="New Password" 
+                      value={newPassword}
+                      onChange={e => setNewPassword(e.target.value)}
+                      className="h-10 text-sm"
+                    />
+                    <Input 
+                      type="password" 
+                      placeholder="Confirm New Password" 
+                      value={confirmPassword}
+                      onChange={e => setConfirmPassword(e.target.value)}
+                      className="h-10 text-sm"
+                    />
+                    {passwordError && <p className="text-xs text-destructive">{passwordError}</p>}
+                    {passwordSuccess && <p className="text-xs text-green-500">{passwordSuccess}</p>}
+                    <div className="flex gap-2 pt-2">
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="flex-1"
+                        onClick={() => {
+                          setIsChangingPassword(false)
+                          setPasswordError("")
+                          setNewPassword("")
+                          setConfirmPassword("")
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={handleUpdatePassword}
+                        disabled={updatingPassword}
+                      >
+                        {updatingPassword ? "Saving..." : "Save"}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

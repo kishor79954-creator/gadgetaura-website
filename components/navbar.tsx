@@ -15,7 +15,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Logo } from "./logo"
-import { useState, useEffect } from "react"
+import { useState, useEffect, memo } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,11 +28,16 @@ import { useAuth } from "@/app/context/AuthContext"
 import { useCart } from "@/app/context/Cart-Context"
 import { useWishlist } from "@/app/context/WishlistContext"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { SearchCommand } from "@/components/search-command"
+import dynamic from "next/dynamic"
+
+const SearchCommand = dynamic(
+  () => import("@/components/search-command").then(m => m.SearchCommand),
+  { ssr: false }
+)
 import Image from "next/image"
 
 
-export function Navbar() {
+export const Navbar = memo(function Navbar() {
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -337,4 +342,4 @@ export function Navbar() {
       )}
     </nav>
   )
-}
+})
