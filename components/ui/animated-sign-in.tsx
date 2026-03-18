@@ -91,9 +91,9 @@ const AnimatedSignIn: React.FC = () => {
                     const { error } = await supabase.auth.signInWithPassword({ email, password })
                     if (error) throw error
                     const params = new URLSearchParams(window.location.search)
-                    const from = params.get("redirectedFrom") || "/"
-                    router.push(from)
-                    router.refresh()
+                    const from = params.get("redirectedFrom") || "/admin"
+                    // Hard navigation ensures cookies are fully written by Supabase listener before request
+                    window.location.href = from
                 }
             } catch (err: any) {
                 setError(err.message || "An authentication error occurred")
