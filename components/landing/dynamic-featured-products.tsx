@@ -97,12 +97,10 @@ export function DynamicFeaturedProducts() {
 
                   <div className="absolute inset-0 block overflow-hidden bg-black border-b border-border/10 rounded-t-2xl">
                     {product.image_url ? (
-                      <Image
+                      <img
                         src={product.image_url}
                         alt={product.name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-muted-foreground/50 bg-muted text-5xl grayscale">
