@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
 import { RotatingWatchCarousel } from "@/components/ui/rotating-watch-carousel"
-import { BeamsBackground } from "@/components/ui/beams-background"
 import { useEffect } from "react"
 
 export function HeroSection() {
@@ -13,7 +12,7 @@ export function HeroSection() {
     /* 🔴 Disable pointer events for background layers */
     <main className="overflow-x-hidden relative pointer-events-none">
 
-      <BeamsBackground intensity="strong">
+      <div className="w-full bg-[#0a0a0a] relative">
 
         {/* ✅ Enable pointer events only for content */}
         <section className="relative z-10 pointer-events-auto">
@@ -57,7 +56,7 @@ export function HeroSection() {
             </div>
           </div>
         </section>
-      </BeamsBackground>
+      </div>
 
       {/* BRAND STRIP + GLASS BUTTON */}
       <section className="bg-background/50 backdrop-blur-sm pb-16 border-y border-border/10 pointer-events-auto">
