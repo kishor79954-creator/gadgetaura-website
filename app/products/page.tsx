@@ -204,15 +204,16 @@ function CatalogContent() {
             {displayProducts.map((p) => (
               <div key={p.id} className="h-full">
 
-                <div 
-                  onClick={() => router.push(`/products/detail/${p.id}`)} 
+                <Link 
+                  href={`/products/detail/${p.id}`} 
                   className="group relative h-full flex flex-col rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 bg-card border border-border dark:bg-slate-950"
+                  style={{ touchAction: 'pan-y' }}
                 >
 
                       {/* Image */}
                       <div className="relative w-full aspect-[4/5] sm:aspect-square flex-shrink-0">
                         {/* BADGES TOP LEFT */}
-                        <div className="absolute top-3 left-3 z-20 flex flex-col gap-2 pointer-events-none">
+                        <div className="absolute top-3 left-3 z-30 flex flex-col gap-2 pointer-events-none">
                           {p.is_trending && (
                             <span className="bg-blue-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wider shadow-sm flex items-center gap-1 w-max">
                               Trending <span className="text-sm">🔥</span>
@@ -231,7 +232,7 @@ function CatalogContent() {
                         </div>
 
                         {/* DISCOUNT BOTTOM RIGHT */}
-                        <div className="absolute bottom-3 right-3 z-20 pointer-events-none">
+                        <div className="absolute bottom-3 right-3 z-30 pointer-events-none">
                           {p.compare_at_price && p.compare_at_price > p.price && (
                             <span className="bg-indigo-950 text-indigo-300 border border-indigo-800 text-[10px] sm:text-xs font-bold px-2 py-1 rounded shadow-md">
                               {Math.round(((p.compare_at_price - p.price) / p.compare_at_price) * 100)}% OFF
@@ -239,14 +240,14 @@ function CatalogContent() {
                           )}
                         </div>
 
-                        <div className="absolute top-3 right-3 z-20">
+                        <div className="absolute top-3 right-3 z-40">
                           <button
                             onClick={(e) => {
                               e.preventDefault()
                               e.stopPropagation()
                               toggleWishlist(p)
                             }}
-                            className="bg-black/20 hover:bg-black/50 backdrop-blur-md p-2 rounded-full transition-all"
+                            className="bg-black/40 hover:bg-black/60 backdrop-blur-md p-2 rounded-full transition-all"
                           >
                             <Heart
                               className={`w-4 h-4 transition-colors ${isInWishlist(p.id) ? "fill-red-500 text-red-500" : "text-white"}`}
@@ -259,7 +260,7 @@ function CatalogContent() {
                             <img
                               src={p.image_url}
                               alt={p.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none"
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-muted-foreground/50 bg-muted">
@@ -301,7 +302,7 @@ function CatalogContent() {
                               }
                             }}
                             disabled={p.stock_count === 0}
-                            className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all shadow-sm z-30 relative ${p.stock_count === 0
+                            className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all shadow-sm z-40 relative ${p.stock_count === 0
                               ? "bg-muted text-muted-foreground cursor-not-allowed"
                               : "bg-blue-600 text-white hover:bg-blue-500 hover:text-white hover:scale-105 active:scale-95"
                               }`}
@@ -311,7 +312,7 @@ function CatalogContent() {
                           </button>
                         </div>
                       </div>
-                </div>
+                </Link>
               </div>
             ))}
           </div>
