@@ -41,11 +41,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         .single()
 
       if (data) {
-        const extraImages = (data.product_images || [])
+        const sortedExtra = (data.product_images || [])
           .sort((a: any, b: any) => a.sort_order - b.sort_order)
           .map((img: any) => img.image_url)
 
-        const allImages = [data.image_url, ...extraImages].filter(Boolean)
+        const primary = data.image_url || sortedExtra[0]
+        const rawImages = primary ? [primary, ...sortedExtra] : sortedExtra
+        const allImages = Array.from(new Set(rawImages)).filter(Boolean)
 
         // Check for variants
         const variants = data.variants || []
@@ -55,9 +57,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         // Select first variant by default if exists
         if (variants.length > 0) {
           setSelectedVariantId(variants[0].name) // Using name as ID for now since we stored it simply
-          setDisplayedImage(variants[0].image_url)
+          setDisplayedImage(variants[0].image_url || null)
         } else {
-          setDisplayedImage(data.image_url)
+          setDisplayedImage(primary || null)
         }
       }
       setLoading(false)
@@ -108,8 +110,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
         {/* LEFT: Gallery */}
         <div>
-          {/* Pass displayed image as the first one if selected */}
-          <ProductImageGallery images={displayedImage ? [displayedImage, ...product.allImages.filter((img: string) => img !== displayedImage)] : product.allImages} />
+          <ProductImageGallery images={displayedImage ? Array.from(new Set([displayedImage, ...product.allImages])) : product.allImages} />
         </div>
 
         {/* RIGHT: Product Details */}
