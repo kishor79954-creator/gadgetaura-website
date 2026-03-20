@@ -58,6 +58,9 @@ export default function AdminProductsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
 
+  // Hydration fix
+  const [mounted, setMounted] = useState(false)
+
   const load = async () => {
     setError(null)
     setLoading(true)
@@ -94,6 +97,7 @@ export default function AdminProductsPage() {
   }
 
   useEffect(() => {
+    setMounted(true)
     load()
   }, [])
 
@@ -174,6 +178,14 @@ export default function AdminProductsPage() {
       case 'archived': return 'bg-orange-500/10 text-orange-400 hover:bg-orange-500/20 shadow-none border-orange-500/20'
       default: return 'bg-gray-500/10 text-gray-500'
     }
+  }
+
+  if (!mounted) {
+    return (
+      <div className="bg-background min-h-screen pb-20 p-4 md:p-8 flex items-center justify-center">
+        <p className="text-muted-foreground animate-pulse">Loading Admin Workspace...</p>
+      </div>
+    )
   }
 
   return (
