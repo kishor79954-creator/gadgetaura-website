@@ -283,9 +283,23 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
   const handleNewFilesChange = (files: FileList | null) => {
     if (!files) return
-    const arr = Array.from(files)
-    if (arr.length > 0) {
-      setCropQueue(arr)
+    const allAdded = Array.from(files)
+
+    // Deduplicate against actively queued new image files
+    const uniqueNewFiles = allAdded.filter(incoming => {
+      const isDuplicateQueue = newImageFiles.some(existing => 
+        existing.name === incoming.name && existing.size === incoming.size
+      )
+      // Check existing images from DB (rough check using URL filename if possible, but safe to just check active queue)
+      return !isDuplicateQueue
+    })
+
+    if (uniqueNewFiles.length < allAdded.length) {
+      alert("Some duplicate images were automatically ignored.")
+    }
+
+    if (uniqueNewFiles.length > 0) {
+      setCropQueue(uniqueNewFiles)
       setIsCropping(true)
     }
   }

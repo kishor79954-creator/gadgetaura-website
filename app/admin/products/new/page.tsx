@@ -95,18 +95,31 @@ export default function NewProductPage() {
   }
 
   const handleFilesChange = (files: FileList | null) => {
-    const arr = Array.from(files ?? [])
+    if (!files) return
+    const allAdded = Array.from(files)
+    
+    // Deduplicate against already added files
+    const uniqueNewFiles = allAdded.filter(newFile => {
+      const isDuplicate = imageFiles.some(existingFile => 
+        existingFile.name === newFile.name && existingFile.size === newFile.size
+      )
+      return !isDuplicate
+    })
 
-    if (imageFiles.length + arr.length > 10) {
+    if (uniqueNewFiles.length < allAdded.length) {
+      alert("Some duplicate images were automatically ignored.")
+    }
+
+    if (imageFiles.length + uniqueNewFiles.length > 10) {
       alert("You can only have up to 10 images total. Some will be ignored.")
     }
 
     const currentCount = imageFiles.length
     const remainingSlots = 10 - currentCount
-    const newFiles = arr.slice(0, remainingSlots)
+    const finalFiles = uniqueNewFiles.slice(0, remainingSlots)
 
-    if (newFiles.length > 0) {
-      setCropQueue(newFiles)
+    if (finalFiles.length > 0) {
+      setCropQueue(finalFiles)
       setIsCropping(true)
     }
   }

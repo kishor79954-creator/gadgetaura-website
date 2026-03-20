@@ -206,12 +206,12 @@ function CatalogContent() {
 
                 <Link 
                   href={`/products/detail/${p.id}`} 
-                  className="group relative h-full flex flex-col rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 bg-card border border-border dark:bg-slate-950"
+                  className="group relative h-full flex flex-col rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 md:hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 bg-card border border-border dark:bg-slate-950"
                   style={{ touchAction: 'pan-y' }}
                 >
 
                       {/* Image */}
-                      <div className="relative w-full aspect-[4/5] sm:aspect-square flex-shrink-0">
+                      <div className="relative w-full aspect-square flex-shrink-0">
                         {/* BADGES TOP LEFT */}
                         <div className="absolute top-3 left-3 z-30 flex flex-col gap-2 pointer-events-none">
                           {p.is_trending && (

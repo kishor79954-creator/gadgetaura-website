@@ -45,7 +45,7 @@ export default function ProductImageGallery({ images }: GalleryProps) {
   return (
     <div className="space-y-4 w-full">
       {/* MAIN LARGE IMAGE CAROUSEL */}
-      <div className="relative w-full aspect-[4/5] sm:aspect-square overflow-hidden rounded-2xl border border-border bg-card group">
+      <div className="relative w-full aspect-square overflow-hidden rounded-2xl border border-border bg-card group">
         
         {/* Scroll Container */}
         <div 

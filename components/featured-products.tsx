@@ -97,7 +97,7 @@ export function FeaturedProducts() {
 
         // IF PRODUCT EXISTS
         return (
-          <div key={product.id} className="group relative h-full flex flex-col rounded-2xl border border-border/50 dark:border-slate-800 dark:hover:border-blue-500/30 overflow-hidden transition-all duration-300 hover:shadow-2xl dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.12)] hover:-translate-y-2 bg-card dark:bg-slate-950">
+          <div key={product.id} className="group relative h-full flex flex-col rounded-2xl border border-border/50 dark:border-slate-800 dark:hover:border-blue-500/30 overflow-hidden transition-all duration-300 hover:shadow-2xl dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.12)] md:hover:-translate-y-2 bg-card dark:bg-slate-950">
             {/* Image Area */}
             <div className="block relative w-full flex-shrink-0 aspect-[4/5] sm:aspect-square overflow-hidden bg-black border-b border-border/10">
               {/* BADGES OVERLAY TOP LEFT */}

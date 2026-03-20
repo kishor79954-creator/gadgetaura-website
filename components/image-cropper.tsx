@@ -32,7 +32,7 @@ export function ImageCropper({ imageFile, isOpen, onClose, onCropComplete }: Ima
     const [crop, setCrop] = useState({ x: 0, y: 0 })
     const [zoom, setZoom] = useState(1)
     const [rotation, setRotation] = useState(0)
-    const [aspect, setAspect] = useState(4 / 5) // Default to Instagram portrait
+    const [aspect, setAspect] = useState(1 / 1) // Default to Square
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
 
     const [isProcessing, setIsProcessing] = useState(false)
