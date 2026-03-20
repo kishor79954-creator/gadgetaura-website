@@ -23,7 +23,7 @@ const HoverBorderGradient = dynamic(
 
 const ContainerScroll = dynamic(
   () => import("@/components/ui/container-scroll-animation").then(m => m.ContainerScroll),
-  { loading: () => <div className="h-96 animate-pulse bg-muted rounded-2xl mx-6 mb-12" /> }
+  { ssr: false, loading: () => <div className="h-96 animate-pulse bg-muted rounded-2xl mx-6 mb-12" /> }
 )
 
 const InstagramReels = dynamic(
@@ -101,19 +101,13 @@ export default function LandingPage() {
           }
         >
           <div className="w-full h-full bg-black relative rounded-2xl overflow-hidden border border-border shadow-xl">
-            {/* MOBILE FALLBACK: Still provides the Scrollpane UI layout but without the crippling video processing overhead */}
-            <div className="block md:hidden absolute inset-0 bg-gradient-to-br from-zinc-800 to-black w-full h-full">
-              <div className="absolute inset-0 opacity-30 bg-[url('https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay" />
-            </div>
-
-            {/* DESKTOP EXCLUSIVE VIDEO: Loaded only when computing power is abundant */}
             <video
-              className="hidden md:block w-full h-full object-cover"
+              className="w-full h-full object-cover"
               autoPlay
               loop
               muted
               playsInline
-              preload="none"
+              preload="auto"
             >
               <source src="/landing/scrollpanevideo.mp4" type="video/mp4" />
             </video>
