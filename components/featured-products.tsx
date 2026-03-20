@@ -167,7 +167,12 @@ export function FeaturedProducts() {
                   onClick={(e) => {
                     e.preventDefault()
                     if (product.stock_count !== 0) {
-                      handleAddToCart(product)
+                      // @ts-ignore
+                      if (product.variants && Array.isArray(product.variants) && product.variants.length > 0) {
+                        window.location.href = `/products/detail/${product.id}`
+                      } else {
+                        handleAddToCart(product)
+                      }
                     }
                   }}
                   disabled={product.stock_count === 0}

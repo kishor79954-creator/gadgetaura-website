@@ -97,10 +97,9 @@ export default function CheckoutPage() {
 
       if (orderError) throw new Error("Order creation failed: " + orderError.message)
 
-      // 3. Create Order Items
       const orderItems = items.map(item => ({
         order_id: orderData.id,
-        product_id: item.id,
+        product_id: item.product_id || item.id, // Fallback for old carts
         product_name: item.name,
         quantity: item.quantity,
         price: item.price

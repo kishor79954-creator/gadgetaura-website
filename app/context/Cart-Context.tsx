@@ -4,7 +4,9 @@ import { createContext, useContext, useEffect, useState, useMemo, useCallback } 
 
 // Define the shape of a Cart Item
 export type CartItem = {
-  id: string
+  id: string // Cart unique ID (product.id + variant)
+  product_id: string // Actual DB UUID
+  selectedVariant?: string
   name: string
   price: number
   image_url: string
@@ -49,12 +51,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const addToCart = useCallback((product: any) => {
     setItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id)
+      const cartItemId = product.selectedVariant ? `${product.id}-${product.selectedVariant}` : product.id
+      const existing = prev.find((item) => item.id === cartItemId)
 
       if (existing) {
         // If item exists, increase quantity
         return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === cartItemId ? { ...item, quantity: item.quantity + 1 } : item
         )
       }
 
@@ -65,8 +68,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         || ""
 
       return [...prev, {
-        id: product.id,
-        name: product.name,
+        id: cartItemId,
+        product_id: product.id,
+        selectedVariant: product.selectedVariant,
+        name: product.selectedVariant ? `${product.name} (${product.selectedVariant})` : product.name,
         price: product.price,
         image_url: imageUrl,
         quantity: 1
@@ -84,9 +89,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       || (product.images && product.images[0])
       || ""
 
+    const cartItemId = product.selectedVariant ? `${product.id}-${product.selectedVariant}` : product.id
+
     const newItem = {
-      id: product.id,
-      name: product.name,
+      id: cartItemId,
+      product_id: product.id,
+      selectedVariant: product.selectedVariant,
+      name: product.selectedVariant ? `${product.name} (${product.selectedVariant})` : product.name,
       price: product.price,
       image_url: imageUrl,
       quantity: 1
