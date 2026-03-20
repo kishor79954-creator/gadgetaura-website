@@ -215,6 +215,10 @@ export default function NewProductPage() {
     setVariants(variants.map(v => v.id === id ? { ...v, imageFile: file, image_url: previewUrl } : v))
   }
 
+  const handleVariantImageRemove = (id: string) => {
+    setVariants(variants.map(v => v.id === id ? { ...v, imageFile: null, image_url: "" } : v))
+  }
+
   // Modified handleSubmit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -391,7 +395,7 @@ export default function NewProductPage() {
                         <button
                           type="button"
                           onClick={() => removeImage(idx)}
-                          className="absolute top-2 right-2 bg-destructive/90 text-white rounded-full p-1.5 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="absolute top-2 right-2 bg-destructive text-white rounded-full p-1.5 shadow-sm opacity-100 hover:bg-red-600 transition-opacity"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -465,9 +469,23 @@ export default function NewProductPage() {
                         <Label>Variant Image</Label>
                         <div className="flex items-center gap-2">
                           {variant.image_url ? (
-                            <img src={variant.image_url} className="w-10 h-10 rounded border object-cover" />
+                            <div className="relative group">
+                              <img src={variant.image_url} className="w-10 h-10 rounded border object-cover" />
+                              <button 
+                                type="button" 
+                                onClick={() => handleVariantImageRemove(variant.id)} 
+                                className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-0.5 shadow-md hover:scale-110 active:scale-95"
+                              >
+                                <X className="w-3 h-3"/>
+                              </button>
+                            </div>
                           ) : <div className="w-10 h-10 rounded border bg-muted" />}
-                          <Input type="file" className="text-xs" accept="image/*" onChange={e => e.target.files?.[0] && handleVariantImageUpload(variant.id, e.target.files[0])} />
+                          <Input type="file" className="text-xs" accept="image/*" onChange={e => {
+                            if (e.target.files?.[0]) {
+                              handleVariantImageUpload(variant.id, e.target.files[0])
+                            }
+                            e.target.value = '' // Reset input so same file can be uploaded again
+                          }} />
                         </div>
                       </div>
                       <div className="md:col-span-1">
