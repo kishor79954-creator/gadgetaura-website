@@ -9,33 +9,7 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-// --- Isolated Textarea Component to prevent full-page re-renders on every keystroke ---
-function LocalTextarea({ 
-  initialValue, 
-  onChange, 
-  placeholder 
-}: { 
-  initialValue: string, 
-  onChange: (val: string) => void, 
-  placeholder: string 
-}) {
-  const [localVal, setLocalVal] = useState(initialValue)
 
-  return (
-    <textarea
-      value={localVal}
-      onChange={(e) => {
-        setLocalVal(e.target.value)
-      }}
-      onBlur={() => {
-        onChange(localVal)
-      }}
-      placeholder={placeholder}
-      className="w-full min-h-[100px] p-3 rounded-xl border border-input bg-background mb-4 text-sm focus:ring-2 focus:ring-primary focus:outline-none transition-shadow"
-    />
-  )
-}
-// ---------------------------------------------------------------------------------
 
 type OrderRow = {
   id: string
@@ -288,16 +262,17 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
               </h3>
               <p className="text-sm text-muted-foreground mb-4">Please let us know why you are cancelling this order so we can improve.</p>
               
-              <LocalTextarea 
-                initialValue={cancelReason}
-                onChange={setCancelReason}
+              <textarea 
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
                 placeholder="Ex: I found a better price elsewhere, or I ordered the wrong item by mistake..."
+                className="w-full min-h-[100px] p-4 rounded-xl border border-border bg-background mb-4 text-sm focus:ring-2 focus:ring-destructive focus:outline-none transition-shadow"
               />
               
               <div className="flex justify-end gap-3">
                 <Button variant="outline" onClick={() => setIsCancelModalOpen(false)}>Nevermind</Button>
                 <Button variant="destructive" onClick={handleCancelOrder} disabled={isCancelling}>
-                  {isCancelling ? "Cancelling..." : "Confirm Cancellation"}
+                  {isCancelling ? "Cancelling..." : "Cancel Order"}
                 </Button>
               </div>
             </div>
@@ -326,10 +301,11 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                 
                 <div>
                   <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Reason / Details</label>
-                  <LocalTextarea 
-                    initialValue={returnReason}
-                    onChange={setReturnReason}
+                  <textarea 
+                    value={returnReason}
+                    onChange={(e) => setReturnReason(e.target.value)}
                     placeholder="Ex: Item arrived damaged, missing accessories, or sizing issue..."
+                    className="w-full min-h-[100px] p-4 rounded-xl border border-border bg-background mb-4 text-sm focus:ring-2 focus:ring-primary focus:outline-none transition-shadow"
                   />
                 </div>
               </div>

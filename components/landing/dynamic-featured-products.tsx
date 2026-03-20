@@ -6,8 +6,10 @@ import Image from "next/image"
 import { ShoppingCart } from "lucide-react"
 
 import { supabase } from "@/lib/supabaseClient"
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient"
-import { GlowCard } from "@/components/ui/spotlight-card"
+import dynamic from "next/dynamic"
+
+const HoverBorderGradient = dynamic(() => import("@/components/ui/hover-border-gradient").then((m) => m.HoverBorderGradient), { ssr: false });
+const GlowCard = dynamic(() => import("@/components/ui/spotlight-card").then((m) => m.GlowCard), { ssr: false });
 
 type FeaturedProduct = {
   id: string
