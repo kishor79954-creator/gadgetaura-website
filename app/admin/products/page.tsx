@@ -373,6 +373,30 @@ export default function AdminProductsPage() {
           </div>
         </div>
 
+        {/* TOP SELLING WATCHES (5-8) */}
+        <div>
+          <h2 className="text-base md:text-lg font-bold mb-4 flex items-center gap-2">
+            Top Selling Watches
+            <Badge variant="outline" className="text-xs border-indigo-500 text-indigo-500">Homepage Merchandising</Badge>
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }, (_, i) => {
+              const slotNumber = 5 + i
+              const product = products.find(p => p.homepageslot === slotNumber)
+              return (
+                <HomepageSlotCard
+                  key={slotNumber}
+                  slotNumber={slotNumber}
+                  product={product}
+                  onEdit={() => product && router.push(`/admin/products/${product.id}`)}
+                  onAssign={() => router.push(`/admin/products/homepage?slot=${slotNumber}`)}
+                />
+              )
+            })}
+          </div>
+        </div>
+
         {/* PREMIUM STACK (11-15) */}
         <div>
           <h2 className="text-base md:text-lg font-bold mb-4 flex items-center gap-2">

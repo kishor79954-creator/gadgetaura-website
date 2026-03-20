@@ -47,6 +47,11 @@ const DynamicFeaturedProducts = dynamic(
   { loading: () => <div className="h-96 animate-pulse bg-muted rounded-2xl mx-6 mb-12" /> }
 )
 
+const DynamicTopSellingWatches = dynamic(
+  () => import("@/components/landing/dynamic-top-selling-watches").then(m => m.DynamicTopSellingWatches),
+  { loading: () => <div className="h-96 animate-pulse bg-muted rounded-2xl mx-6 mb-12" /> }
+)
+
 const DynamicPremiumStack = dynamic(
   () => import("@/components/landing/dynamic-premium-stack").then(m => m.DynamicPremiumStack),
   { loading: () => <div className="h-96 animate-pulse bg-muted mx-6 mb-12" /> }
@@ -82,6 +87,20 @@ export default function LandingPage() {
           </h3>
 
           <DynamicFeaturedProducts />
+        </div>
+      </section>
+
+      {/* TOP SELLING WATCHES */}
+      <section className="pt-2 pb-6 px-6 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-secondary text-xs uppercase tracking-[0.4em] mb-2 font-bold opacity-80">
+            Fan Favorites
+          </h2>
+          <h3 className="text-3xl md:text-5xl font-bold text-foreground mb-8">
+            Top Selling Watches
+          </h3>
+
+          <DynamicTopSellingWatches />
         </div>
       </section>
 
