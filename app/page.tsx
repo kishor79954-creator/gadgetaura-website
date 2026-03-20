@@ -59,6 +59,10 @@ const DynamicPremiumStack = dynamic(
 export default function LandingPage() {
   return (
     <main className="min-h-screen relative">
+      {/* 🚀 Next.js natively hoists these elements to the <head> of the document immediately! */}
+      <link rel="preload" as="video" href="/landing/vid1.mp4" type="video/mp4" fetchPriority="high" />
+      <link rel="preload" as="video" href="/landing/scrollpanevideo.mp4" type="video/mp4" fetchPriority="high" />
+      
       {/* VIDEO SECTION */}
       <div className="-mt-32">
         <LandingVideo />

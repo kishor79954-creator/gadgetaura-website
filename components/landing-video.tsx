@@ -35,6 +35,7 @@ export function LandingVideo() {
                         autoPlay
                         muted
                         playsInline
+                        preload="auto"
                         className="w-full h-full object-cover"
                         onEnded={handleVideoEnd}
                     />
