@@ -83,25 +83,31 @@ export const Navbar = memo(function Navbar() {
               Home
             </Link>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                className="flex items-center gap-1 text-sm font-medium text-white/70 hover:text-primary transition-colors outline-none"
-              >
+            {mounted ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className="flex items-center gap-1 text-sm font-medium text-white/70 hover:text-primary transition-colors outline-none"
+                >
+                  Shop <ChevronDown className="w-4 h-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="start"
+                  className="w-48 bg-white/95 backdrop-blur-sm border border-border text-black"
+                >
+                  {categories.map((cat) => (
+                    <DropdownMenuItem key={cat.name} asChild>
+                      <Link href={cat.href} className="w-full cursor-pointer">
+                        {cat.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center gap-1 text-sm font-medium text-white/70">
                 Shop <ChevronDown className="w-4 h-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-48 bg-white/95 backdrop-blur-sm border border-border text-black"
-              >
-                {categories.map((cat) => (
-                  <DropdownMenuItem key={cat.name} asChild>
-                    <Link href={cat.href} className="w-full cursor-pointer">
-                      {cat.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </div>
+            )}
 
             {user?.email === "admin@gadgetura.com" && (
               <Link
