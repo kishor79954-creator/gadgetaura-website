@@ -38,7 +38,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
   // Variants
   const [hasVariants, setHasVariants] = useState(false)
-  const [variants, setVariants] = useState<{ id: string; name: string; stock: number; image_url: string; imageFile: File | null }[]>([])
+  const [variants, setVariants] = useState<{ id: string; name: string; stock: number; image_url: string; imageFile: File | null; price?: string }[]>([])
 
   // New Images Upload
   const [newImageFiles, setNewImageFiles] = useState<File[]>([])
@@ -103,6 +103,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         const loadedVariants = product.variants.map((v: any) => ({
           ...v,
           id: v.id || crypto.randomUUID(), // Ensure ID exists for UI key
+          price: v.price?.toString() || "", // Parse variant override price
           imageFile: null
         }))
         setVariants(loadedVariants)
@@ -144,7 +145,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
   // Variant Handlers
   const handleAddVariant = () => {
-    setVariants([...variants, { id: crypto.randomUUID(), name: "", stock: 0, image_url: "", imageFile: null }])
+    setVariants([...variants, { id: crypto.randomUUID(), name: "", stock: 0, image_url: "", imageFile: null, price: "" }])
   }
 
   const handleRemoveVariant = (id: string) => {
@@ -203,6 +204,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             id: v.id, // Keep the ID
             name: v.name,
             stock: Number(v.stock),
+            price: v.price ? Number(v.price) : null,
             image_url: vImageUrl
           })
         }
@@ -521,15 +523,19 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 <CardContent className="space-y-4">
                   {variants.map((variant, index) => (
                     <div key={variant.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end border p-4 rounded-lg">
-                      <div className="md:col-span-4 space-y-2">
+                      <div className="md:col-span-3 space-y-2">
                         <Label>Color Name</Label>
                         <Input placeholder="e.g. Obsidian" value={variant.name} onChange={e => handleVariantChange(variant.id, "name", e.target.value)} />
                       </div>
-                      <div className="md:col-span-3 space-y-2">
+                      <div className="md:col-span-2 space-y-2">
                         <Label>Stock</Label>
                         <Input type="number" placeholder="0" value={variant.stock} onChange={e => handleVariantChange(variant.id, "stock", e.target.value)} />
                       </div>
-                      <div className="md:col-span-4 space-y-2">
+                      <div className="md:col-span-3 space-y-2">
+                        <Label>Custom Price (₹)</Label>
+                        <Input type="number" placeholder="Optional" value={variant.price || ""} onChange={e => handleVariantChange(variant.id, "price", e.target.value)} />
+                      </div>
+                      <div className="md:col-span-3 space-y-2">
                         <Label>Variant Image</Label>
                         <div className="flex items-center gap-2">
                           {variant.image_url ? (

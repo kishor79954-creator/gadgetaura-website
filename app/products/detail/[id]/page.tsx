@@ -66,11 +66,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   }, [id])
 
   const handleAddToCart = () => {
-    // If variants exist, maybe add specific variant info to cart? 
-    // For now adding main product.
-    // TODO: Update Cart Context to support options
+    const variantObj = product.variants?.find((v: any) => v.name === selectedVariantId)
+    const activePrice = variantObj?.price || product.price
+
     const cartItem = {
       ...product,
+      price: activePrice,
       selectedVariant: selectedVariantId,
       image_url: displayedImage || product.image_url
     }
@@ -85,17 +86,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     }
   }
 
-  // Calculate Discount
-  const discountPercentage = product?.compare_at_price > product?.price
-    ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
-    : 0
-
   if (loading) return <div className="pt-32 text-center text-foreground min-h-screen bg-background">Loading...</div>
   if (!product) return <div className="pt-32 text-center text-foreground min-h-screen bg-background">Product not found.</div>
 
   const currentVariant = product.variants?.find((v: any) => v.name === selectedVariantId)
   // Show variant stock if selected, else product stock
   const currentStock = currentVariant ? currentVariant.stock : product.stock
+  const displayPrice = (currentVariant && currentVariant.price) ? currentVariant.price : product.price
+
+  // Calculate Discount
+  const discountPercentage = product?.compare_at_price > displayPrice
+    ? Math.round(((product.compare_at_price - displayPrice) / product.compare_at_price) * 100)
+    : 0
 
   return (
     <div className="min-h-screen text-foreground p-6 lg:p-20 pt-0 transition-colors duration-300">
@@ -131,12 +133,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             <h1 className="text-4xl lg:text-5xl font-bold mb-4 font-serif">{product.name}</h1>
 
             <div className="flex items-center gap-4">
-              {product.compare_at_price > product.price && (
+              {product.compare_at_price > displayPrice && (
                 <span className="text-xl text-muted-foreground line-through decoration-red-500/50">
                   {formatPrice(product.compare_at_price)}
                 </span>
               )}
-              <span className="text-3xl font-light text-foreground">{formatPrice(product.price)}</span>
+              <span className="text-3xl font-light text-foreground">{formatPrice(displayPrice)}</span>
               {discountPercentage > 0 && (
                 <span className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-3 py-1 rounded-full text-xs font-bold">
                   {discountPercentage}% OFF
@@ -212,6 +214,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               onClick={() => {
                 const cartItem = {
                   ...product,
+                  price: displayPrice,
                   selectedVariant: selectedVariantId,
                   image_url: displayedImage || product.image_url
                 }
