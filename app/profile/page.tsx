@@ -177,6 +177,14 @@ export default function ProfilePage() {
               
               {!isChangingPassword ? (
                 <div className="space-y-3 mt-6 w-full">
+                  {email === "kishor79954@gmail.com" && (
+                    <Button
+                      onClick={() => router.push("/admin")}
+                      className="w-full rounded-xl h-11 font-bold shadow-lg hover:scale-[1.02] bg-primary text-primary-foreground transition-all"
+                    >
+                      <Shield className="w-4 h-4 mr-2" /> Admin Dashboard
+                    </Button>
+                  )}
                   <Button
                     onClick={() => setIsChangingPassword(true)}
                     variant="outline"
