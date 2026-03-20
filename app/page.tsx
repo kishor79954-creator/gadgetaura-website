@@ -2,7 +2,8 @@
 
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
-import { ShoppingCart } from "lucide-react"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 // ─── Heavy components: lazy-loaded so they DON'T block first paint ───────────
 
@@ -79,12 +80,19 @@ export default function LandingPage() {
       {/* FEATURED */}
       <section className="pt-8 pb-6 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-primary text-xs uppercase tracking-[0.4em] mb-2 font-bold">
-            Handpicked Perfection
-          </h2>
-          <h3 className="text-4xl md:text-6xl font-bold text-foreground mb-8">
-            Featured Collection
-          </h3>
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <h2 className="text-primary text-xs uppercase tracking-[0.4em] mb-2 font-bold">
+                Handpicked Perfection
+              </h2>
+              <h3 className="text-4xl md:text-6xl font-bold text-foreground">
+                Featured Collection
+              </h3>
+            </div>
+            <Link href="/products" className="text-sm md:text-base font-semibold text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 group pb-1 md:pb-2">
+              View All <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
 
           <DynamicFeaturedProducts />
         </div>
@@ -93,12 +101,19 @@ export default function LandingPage() {
       {/* TOP SELLING WATCHES */}
       <section className="pt-2 pb-6 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-secondary text-xs uppercase tracking-[0.4em] mb-2 font-bold opacity-80">
-            Fan Favorites
-          </h2>
-          <h3 className="text-3xl md:text-5xl font-bold text-foreground mb-8">
-            Top Selling Watches
-          </h3>
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <h2 className="text-secondary text-xs uppercase tracking-[0.4em] mb-2 font-bold opacity-80">
+                Fan Favorites
+              </h2>
+              <h3 className="text-3xl md:text-5xl font-bold text-foreground">
+                Top Selling Watches
+              </h3>
+            </div>
+            <Link href="/products" className="text-sm md:text-base font-semibold text-muted-foreground hover:text-secondary hover:opacity-100 transition-colors flex items-center gap-1 group pb-1 md:pb-2">
+              View All <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
 
           <DynamicTopSellingWatches />
         </div>
