@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "./context/AuthContext"
 import { CartProvider } from "./context/Cart-Context"
 import { WishlistProvider } from "./context/WishlistContext"
-import { EtheralShadowClient } from "@/components/ui/etheral-shadow-client"
+
 import { PageTransitionLoader } from "@/components/ui/page-transition-loader"
 import { CookieConsent } from "@/components/cookie-consent"
 
@@ -56,7 +56,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans bg-background text-foreground antialiased relative">
-        <EtheralShadowClient />
+
 
         <ThemeProvider
           attribute="class"
