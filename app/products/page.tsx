@@ -8,8 +8,6 @@ import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
 import { ShinyButton } from "@/components/ui/shiny-button"
 import { ArrowRight, Filter, ShoppingCart, Heart } from "lucide-react"
-import { GlowCard } from "@/components/ui/spotlight-card" // ✅ Uses your existing component
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient" // ✅ New animated border
 import { useWishlist } from "@/app/context/WishlistContext"
 
 type Product = {
@@ -206,19 +204,10 @@ function CatalogContent() {
             {displayProducts.map((p) => (
               <div key={p.id} className="h-full">
 
-                {/* YOUR GLOW CARD COMPONENT */}
-                {/* Note: GlowCard internal styles might need adjustment if they are hardcoded black */}
-                <HoverBorderGradient
-                  containerClassName="h-full w-full !p-0"
-                  className="h-full w-full !p-0 bg-transparent rounded-2xl"
-                  duration={1.5}
+                <div 
+                  onClick={() => router.push(`/products/detail/${p.id}`)} 
+                  className="group relative h-full flex flex-col rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 bg-card border border-border dark:bg-slate-950"
                 >
-                  <GlowCard
-                    glowColor="amber"
-                    customSize={true}
-                    className="flex flex-col h-full w-full !p-0 !gap-0 overflow-hidden group transition-all duration-300 hover:-translate-y-2 rounded-2xl border-none bg-card dark:bg-slate-950 shadow-none dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.12)] cursor-pointer"
-                  >
-                    <div onClick={() => router.push(`/products/detail/${p.id}`)} className="flex flex-col h-full w-full">
 
                       {/* Image */}
                       <div className="relative w-full aspect-[4/5] sm:aspect-square flex-shrink-0">
@@ -322,10 +311,7 @@ function CatalogContent() {
                           </button>
                         </div>
                       </div>
-                    </div>
-
-                  </GlowCard>
-                </HoverBorderGradient>
+                </div>
               </div>
             ))}
           </div>
