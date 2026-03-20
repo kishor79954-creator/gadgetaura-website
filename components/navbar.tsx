@@ -155,81 +155,95 @@ export const Navbar = memo(function Navbar() {
 
           {/* PROFILE */}
           <div className="hidden md:block">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="
-                  w-10 h-10
-                  flex items-center justify-center
-                  rounded-md
-                  text-white/70 hover:text-white
-                  hover:bg-white/10
-                "
-                >
-                  <User className="w-5 h-5" />
-                </button>
-              </DropdownMenuTrigger>
+            {mounted ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="
+                    w-10 h-10
+                    flex items-center justify-center
+                    rounded-md
+                    text-white/70 hover:text-white
+                    hover:bg-white/10
+                  "
+                  >
+                    <User className="w-5 h-5" />
+                  </button>
+                </DropdownMenuTrigger>
 
-              <DropdownMenuContent
-                align="end"
-                className="w-56 bg-white/95 backdrop-blur-sm border border-border text-black"
-              >
-                <DropdownMenuItem asChild>
-                  <Link href="/wishlist" className="flex items-center justify-between w-full cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <Heart className="w-4 h-4 text-red-500" />
-                      My Wishlist
-                    </div>
-                    {mounted && wishlistCount > 0 && (
-                      <span className="bg-red-500 text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
-                        {wishlistCount}
-                      </span>
-                    )}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {!user ? (
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 bg-white/95 backdrop-blur-sm border border-border text-black"
+                >
                   <DropdownMenuItem asChild>
-                    <Link href="/auth" className="flex items-center gap-2">
-                      <LogIn className="w-4 h-4" />
-                      Login / Sign Up
+                    <Link href="/wishlist" className="flex items-center justify-between w-full cursor-pointer">
+                      <div className="flex items-center gap-2">
+                        <Heart className="w-4 h-4 text-red-500" />
+                        My Wishlist
+                      </div>
+                      {wishlistCount > 0 && (
+                        <span className="bg-red-500 text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+                          {wishlistCount}
+                        </span>
+                      )}
                     </Link>
                   </DropdownMenuItem>
-                ) : (
-                  <>
-                    <div className="px-2 py-1.5 text-xs text-gray-500 truncate">
-                      {user.email}
-                    </div>
-
-                    <DropdownMenuSeparator />
-
+                  <DropdownMenuSeparator />
+                  {!user ? (
                     <DropdownMenuItem asChild>
-                      <Link href="/profile" className="flex items-center gap-2">
-                        <UserCircle className="w-4 h-4" />
-                        My Profile
+                      <Link href="/auth" className="flex items-center gap-2">
+                        <LogIn className="w-4 h-4" />
+                        Login / Sign Up
                       </Link>
                     </DropdownMenuItem>
+                  ) : (
+                    <>
+                      <div className="px-2 py-1.5 text-xs text-gray-500 truncate">
+                        {user.email}
+                      </div>
 
-                    <DropdownMenuItem asChild>
-                      <Link href="/orders" className="flex items-center gap-2">
-                        <Package className="w-4 h-4" />
-                        My Orders
-                      </Link>
-                    </DropdownMenuItem>
+                      <DropdownMenuSeparator />
 
-                    <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile" className="flex items-center gap-2">
+                          <UserCircle className="w-4 h-4" />
+                          My Profile
+                        </Link>
+                      </DropdownMenuItem>
 
-                    <DropdownMenuItem
-                      onClick={logout}
-                      className="flex items-center gap-2 text-red-500"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Logout
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                      <DropdownMenuItem asChild>
+                        <Link href="/orders" className="flex items-center gap-2">
+                          <Package className="w-4 h-4" />
+                          My Orders
+                        </Link>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuItem
+                        onClick={logout}
+                        className="flex items-center gap-2 text-red-500"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Logout
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <button
+                className="
+                w-10 h-10
+                flex items-center justify-center
+                rounded-md
+                text-white/70 hover:text-white
+                hover:bg-white/10
+              "
+              >
+                <User className="w-5 h-5" />
+              </button>
+            )}
           </div>
 
           {/* MOBILE MENU TOGGLE */}
