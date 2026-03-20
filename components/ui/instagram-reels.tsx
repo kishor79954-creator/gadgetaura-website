@@ -3,10 +3,7 @@
 import Link from "next/link"
 import dynamic from "next/dynamic"
 
-const EtheralShadow = dynamic(
-  () => import("@/components/ui/etheral-shadow").then(m => m.EtheralShadow),
-  { ssr: false }
-)
+
 
 const HoverBorderGradient = dynamic(
   () => import("@/components/ui/hover-border-gradient").then(m => m.HoverBorderGradient),
@@ -17,14 +14,7 @@ export function InstagramReels() {
   return (
     <section className="py-24 overflow-hidden flex flex-col items-center justify-center relative">
 
-      {/* ── Animated background (same as landing page) ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <EtheralShadow
-          color="rgba(128, 128, 128, 0.4)"
-          animation={{ scale: 100, speed: 90 }}
-          sizing="fill"
-        />
-      </div>
+
 
       {/* ── Ambient glow behind card ── */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-yellow-500/10 blur-[110px] rounded-full pointer-events-none z-0" />
