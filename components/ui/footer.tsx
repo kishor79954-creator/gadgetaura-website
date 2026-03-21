@@ -30,16 +30,21 @@ export function Footer() {
           </ul>
         </div>
 
-        {/* CUSTOMER SERVICE */}
+        {/* HELP & SUPPORT */}
         <div>
           <h4 className="text-yellow-500 text-xs uppercase tracking-widest mb-4 font-bold">
-            Customer Service
+            Help & Support
           </h4>
           <ul className="space-y-3 text-muted-foreground text-sm">
             <li><Link href="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
             <li><Link href="/policies/shipping" className="hover:text-foreground transition-colors">Shipping Policy</Link></li>
             <li><Link href="/policies/refunds" className="hover:text-foreground transition-colors">Returns & Refunds</Link></li>
-            <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
+            <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact Us</Link></li>
+            <li className="pt-2">
+              <a href="mailto:customersupport@gadgetaura.in" className="text-yellow-500 hover:text-yellow-400 transition-colors font-medium">
+                customersupport@gadgetaura.in
+              </a>
+            </li>
           </ul>
         </div>
 
