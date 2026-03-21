@@ -58,7 +58,7 @@ function StatCard({ title, value, icon: Icon, trend, color, bgColor, isPositive 
 
 export default function AdminOverview() {
   const [orders, setOrders] = useState<any[]>([])
-  const [totalVisitors, setTotalVisitors] = useState<number>(0)
+  const [visitors, setVisitors] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -74,9 +74,9 @@ export default function AdminOverview() {
   const fetchOrders = async () => {
     setLoading(true)
     
-    // Fetch Visitor Count
-    const { count } = await supabase.from('visitors').select('*', { count: 'exact', head: true })
-    if (count !== null) setTotalVisitors(count)
+    // Fetch Visitor Timestamps
+    const { data: vData } = await supabase.from('visitors').select('visited_at')
+    if (vData) setVisitors(vData)
 
     // Fetch Orders
     const { data, error } = await supabase
@@ -121,6 +121,28 @@ export default function AdminOverview() {
       return orderDate >= startTime && orderDate <= endTime
     })
   }, [orders, timeRange, customStart, customEnd])
+
+  // --- 1.5 Filter Visitors Based on Selected Time Range ---
+  const filteredVisitors = useMemo(() => {
+    if (visitors.length === 0) return []
+    if (timeRange === "all") return visitors
+
+    const now = new Date()
+    let startTime = new Date()
+
+    if (timeRange === "7d") startTime.setDate(now.getDate() - 7)
+    else if (timeRange === "30d") startTime.setDate(now.getDate() - 30)
+    else if (timeRange === "custom" && customStart) startTime = new Date(customStart)
+
+    startTime.setHours(0, 0, 0, 0)
+    let endTime = (timeRange === "custom" && customEnd) ? new Date(customEnd) : new Date()
+    endTime.setHours(23, 59, 59, 999)
+
+    return visitors.filter(v => {
+      const visitDate = new Date(v.visited_at)
+      return visitDate >= startTime && visitDate <= endTime
+    })
+  }, [visitors, timeRange, customStart, customEnd])
 
   // --- 2. Chart Data logic ---
   const chartData = useMemo(() => {
@@ -230,8 +252,8 @@ export default function AdminOverview() {
           trend="Total items sold" color="text-blue-400" bgColor="bg-blue-400/10"
         />
         <StatCard
-          title="Unique Visitors" value={totalVisitors} icon={Users}
-          trend="All-time site visits" color="text-purple-400" bgColor="bg-purple-400/10"
+          title="Unique Visitors" value={filteredVisitors.length} icon={Users}
+          trend={`${timeRange === 'all' ? 'Lifetime' : 'Period'} site visits`} color="text-purple-400" bgColor="bg-purple-400/10"
         />
         <StatCard
           title="Delivered" value={orders.filter(o => o.status === 'delivered').length} icon={CheckCircle}
