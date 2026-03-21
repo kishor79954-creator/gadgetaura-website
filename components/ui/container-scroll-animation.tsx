@@ -23,8 +23,8 @@ export const ContainerScroll = ({
 
   // Removing rotateX transform as animating 3D textures of a playing video causes extreme render lag
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 0])
-  const scale = useTransform(scrollYProgress, [0, 1], isMobile ? [0.8, 0.95] : [1.1, 0.95])
-  const translate = useTransform(scrollYProgress, [0, 1], [0, -100])
+  const scale = useTransform(scrollYProgress, [0, 1], isMobile ? [1, 1] : [1.1, 0.95])
+  const translate = useTransform(scrollYProgress, [0, 1], isMobile ? [0, 0] : [0, -100])
 
   return (
     <div className="h-[60rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>

@@ -145,7 +145,7 @@ export default function LandingPage() {
               loop
               muted
               playsInline
-              preload="auto"
+              preload="none"
             >
               <source src="/landing/scrollpanevideo.mp4" type="video/mp4" />
             </video>
