@@ -59,10 +59,32 @@ export async function middleware(req: NextRequest) {
     }
     
     // C. Approved, allow request to proceed to Next.js router
-    return response
+    // Before returning, run the visitor check for admin as well (in case admin is a new visitor)
   }
 
-  // 2. Default pass-through
+  // 2. Visitor Tracking
+  const visitorCookieName = 'gadgetaura_visitor_id'
+  if (!req.cookies.has(visitorCookieName)) {
+    const visitorId = crypto.randomUUID()
+    
+    // Set cookie on the response so the browser remembers them
+    response.cookies.set(visitorCookieName, visitorId, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30, // 30 Days
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    })
+
+    // Avoid logging bot traffic or prefetches by wrapping in a minimal soft check
+    // The middleware matcher already excludes _next and static assets
+    await supabase.from('visitors').insert({
+      id: visitorId,
+      path: req.nextUrl.pathname,
+      user_agent: req.headers.get('user-agent') || 'Anonymous',
+    })
+  }
+
+  // 3. Default pass-through
   return response
 }
 

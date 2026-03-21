@@ -13,7 +13,8 @@ import {
   ArrowUpRight,
   MoreVertical,
   Search,
-  ArrowDownRight
+  ArrowDownRight,
+  Users
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -57,6 +58,7 @@ function StatCard({ title, value, icon: Icon, trend, color, bgColor, isPositive 
 
 export default function AdminOverview() {
   const [orders, setOrders] = useState<any[]>([])
+  const [totalVisitors, setTotalVisitors] = useState<number>(0)
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -71,6 +73,12 @@ export default function AdminOverview() {
 
   const fetchOrders = async () => {
     setLoading(true)
+    
+    // Fetch Visitor Count
+    const { count } = await supabase.from('visitors').select('*', { count: 'exact', head: true })
+    if (count !== null) setTotalVisitors(count)
+
+    // Fetch Orders
     const { data, error } = await supabase
       .from("orders")
       .select("id, total_amount, status, created_at, customer_email, Address")
@@ -212,7 +220,7 @@ export default function AdminOverview() {
       )}
 
       {/* STATS CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <StatCard
           title="Revenue" value={formatPrice(periodRevenue)} icon={IndianRupee}
           trend={`${timeRange === 'all' ? 'Lifetime' : 'Period'} Revenue`} color="text-green-400" bgColor="bg-green-400/10"
@@ -220,6 +228,10 @@ export default function AdminOverview() {
         <StatCard
           title="Orders" value={filteredOrders.length} icon={ShoppingBag}
           trend="Total items sold" color="text-blue-400" bgColor="bg-blue-400/10"
+        />
+        <StatCard
+          title="Unique Visitors" value={totalVisitors} icon={Users}
+          trend="All-time site visits" color="text-purple-400" bgColor="bg-purple-400/10"
         />
         <StatCard
           title="Delivered" value={orders.filter(o => o.status === 'delivered').length} icon={CheckCircle}
