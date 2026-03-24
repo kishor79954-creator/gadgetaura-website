@@ -219,6 +219,7 @@ export default function CheckoutPage() {
     } catch (err: any) {
       console.error(err)
       alert("Failed to place order: " + err.message)
+    } finally {
       setIsSubmitting(false)
     }
   }
