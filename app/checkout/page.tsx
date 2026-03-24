@@ -18,7 +18,7 @@ export default function CheckoutPage() {
   const { user } = useAuth()
   const router = useRouter()
 
-  const COD_ADVANCE = 149
+  const COD_ADVANCE = 99
   const [paymentMethod, setPaymentMethod] = useState<"UPI" | "COD">("UPI")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
