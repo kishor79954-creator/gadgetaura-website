@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Script from "next/script"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, ShieldCheck, CreditCard, Truck } from "lucide-react"
 
@@ -90,6 +91,7 @@ export default function CheckoutPage() {
           customer_email: email,
           total_amount: totalPrice,
           status: "pending",
+          payment_method: paymentMethod, // e.g. "UPI" or "COD"
           Address: addressPayload
         }])
         .select("id")
@@ -108,44 +110,124 @@ export default function CheckoutPage() {
       const { error: itemsError } = await supabase.from("order_items").insert(orderItems)
       if (itemsError) throw new Error("Items creation failed: " + itemsError.message)
 
-      // 3.5 Dispatch Email Notification to Admin
-      try {
-        await fetch("/api/notify-admin", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-             orderId: orderData.id,
-             customerName: `${firstName} ${lastName}`,
-             customerEmail: email,
-             totalAmount: totalPrice,
-             items: orderItems
-          })
-        });
-      } catch (notifyErr) {
-        console.error("Failed to notify admin, but order succeeded:", notifyErr);
+      // 3. Init Razorpay Order on server
+      const createRes = await fetch('/api/razorpay/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: payNow,
+          receipt: orderData.id,
+        }),
+      });
+
+      const createData = await createRes.json();
+
+      if (!createRes.ok) {
+        throw new Error(createData.error || 'Failed to initialize payment');
       }
 
-      // 4. Success!
-      localStorage.removeItem("cart")
-      alert(`Order placed successfully! Order ID: ${orderData.id}`)
+      // 4. Open Razorpay Checkout Modal
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: Math.round(payNow * 100), // convert INR to paise
+        currency: "INR",
+        name: "GadgetAura",
+        description: paymentMethod === "COD" ? "Advance Payment for COD" : "Order Payment",
+        order_id: createData.orderId,
+        handler: async function (response: any) {
+          try {
+            // Verify payment on the server
+            const verifyRes = await fetch('/api/razorpay/verify', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                supabase_order_id: orderData.id,
+                payment_method: paymentMethod
+              }),
+            });
 
-      // ✅ REDIRECT TO MY ORDERS PANEL
-      router.push(`/orders`)
+            const verifyData = await verifyRes.json();
 
-      // Force refresh to clear cart UI (optional)
-      setTimeout(() => window.location.reload(), 500)
+            if (verifyRes.ok) {
+              // Now we dispatch Email Notification since payment is successful
+              try {
+                await fetch("/api/notify-admin", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                     orderId: orderData.id,
+                     customerName: `${firstName} ${lastName}`,
+                     customerEmail: email,
+                     totalAmount: totalPrice,
+                     items: orderItems,
+                     paymentMethod: paymentMethod // pass payment info to email if needed
+                  })
+                });
+              } catch (notifyErr) {
+                console.error("Failed to notify admin, but order succeeded:", notifyErr);
+              }
+
+              // Success! Clear cart and redirect
+              try {
+                window.localStorage.removeItem("cart")
+              } catch (e) {
+                console.warn("localStorage is not available", e)
+              }
+              alert(`Order placed successfully! Order ID: ${orderData.id}`)
+              
+              router.push(`/orders`)
+              setTimeout(() => window.location.reload(), 500)
+            } else {
+              alert("Payment verification failed. If money was deducted, please contact support.");
+              router.push(`/orders`); // Send to orders page to see pending
+            }
+          } catch (err) {
+            console.error(err);
+            alert("An error occurred during payment verification.");
+          } finally {
+            setIsSubmitting(false) // Enable button again if they navigate back
+          }
+        },
+        prefill: {
+          name: `${firstName} ${lastName}`,
+          email: email,
+          contact: phone,
+        },
+        theme: {
+          color: "#000000",
+        },
+      };
+
+      const rzp1 = new (window as any).Razorpay(options);
+      rzp1.on('payment.failed', function (response: any) {
+        console.error("Payment Failed", response.error);
+        alert(`Payment failed: ${response.error.description}`);
+        setIsSubmitting(false);
+      });
+      rzp1.open();
+
+      // We do NOT set isSubmitting(false) here because the modal is open.
+      // It will map to the handler or payment.failed event.
 
     } catch (err: any) {
       console.error(err)
       alert("Failed to place order: " + err.message)
-    } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <main className="pt-32 pb-24 px-4 md:px-6 min-h-screen text-foreground transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+    <>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+      <main className="pt-32 pb-24 px-4 md:px-6 min-h-screen text-foreground transition-colors duration-300">
+        <div className="max-w-7xl mx-auto">
         <Link href="/cart" className="flex items-center gap-2 text-muted-foreground hover:text-primary mb-8 transition-colors">
           <ArrowLeft className="h-4 w-4" />
           Back to cart
@@ -261,5 +343,6 @@ export default function CheckoutPage() {
         </form>
       </div>
     </main>
+    </>
   )
 }

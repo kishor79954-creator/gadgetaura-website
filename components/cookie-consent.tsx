@@ -9,16 +9,26 @@ export function CookieConsent() {
 
   useEffect(() => {
     // Check if user has already consented
-    const consent = localStorage.getItem("gadgetaura-cookie-consent")
-    if (!consent) {
-      // Delay showing it slightly for a smoother experience
+    try {
+      const consent = window.localStorage.getItem("gadgetaura-cookie-consent")
+      if (!consent) {
+        // Delay showing it slightly for a smoother experience
+        const timer = setTimeout(() => setShowConsent(true), 1500)
+        return () => clearTimeout(timer)
+      }
+    } catch (e) {
+      console.warn("localStorage is not available")
       const timer = setTimeout(() => setShowConsent(true), 1500)
       return () => clearTimeout(timer)
     }
   }, [])
 
   const acceptCookies = () => {
-    localStorage.setItem("gadgetaura-cookie-consent", "true")
+    try {
+      window.localStorage.setItem("gadgetaura-cookie-consent", "true")
+    } catch (e) {
+      console.warn("localStorage is not available")
+    }
     setShowConsent(false)
   }
 

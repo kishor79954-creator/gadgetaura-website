@@ -31,13 +31,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Load cart from localStorage on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("cart")
-      if (saved) {
-        try {
-          setItems(JSON.parse(saved))
-        } catch (error) {
-          console.error("Failed to parse cart data", error)
+      try {
+        const saved = window.localStorage.getItem("cart")
+        if (saved) {
+          try {
+            setItems(JSON.parse(saved))
+          } catch (error) {
+            console.error("Failed to parse cart data", error)
+          }
         }
+      } catch (error) {
+        console.warn("localStorage is not available", error)
       }
     }
   }, [])
@@ -45,7 +49,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Save to localStorage whenever cart changes
   useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("cart", JSON.stringify(items))
+      try {
+        window.localStorage.setItem("cart", JSON.stringify(items))
+      } catch (error) {
+        console.warn("localStorage is not available", error)
+      }
     }
   }, [items])
 

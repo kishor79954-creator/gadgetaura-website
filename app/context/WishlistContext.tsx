@@ -27,13 +27,17 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         setMounted(true)
         if (typeof window !== "undefined") {
-            const saved = localStorage.getItem("wishlist")
-            if (saved) {
-                try {
-                    setItems(JSON.parse(saved))
-                } catch (error) {
-                    console.error("Failed to parse wishlist data", error)
+            try {
+                const saved = window.localStorage.getItem("wishlist")
+                if (saved) {
+                    try {
+                        setItems(JSON.parse(saved))
+                    } catch (error) {
+                        console.error("Failed to parse wishlist data", error)
+                    }
                 }
+            } catch (error) {
+                console.warn("localStorage is not available", error)
             }
         }
     }, [])
@@ -41,7 +45,11 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     // Save to localStorage whenever wishlist changes
     useEffect(() => {
         if (mounted && typeof window !== "undefined") {
-            localStorage.setItem("wishlist", JSON.stringify(items))
+            try {
+                window.localStorage.setItem("wishlist", JSON.stringify(items))
+            } catch (error) {
+                console.warn("localStorage is not available", error)
+            }
         }
     }, [items, mounted])
 
