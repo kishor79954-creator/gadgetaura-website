@@ -33,11 +33,11 @@ export function LandingVideo() {
                         ref={videoRef}
                         src={videos[currentVideoIndex]}
                         autoPlay
+                        loop
                         muted
                         playsInline
                         preload="auto"
                         className="w-full h-full object-cover"
-                        onEnded={handleVideoEnd}
                     />
                 </motion.div>
             </AnimatePresence>

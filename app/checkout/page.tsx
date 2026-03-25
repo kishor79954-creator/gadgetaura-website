@@ -62,9 +62,6 @@ export default function CheckoutPage() {
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    alert("We are currently upgrading our systems. All payments are paused for 24 hours. Please check back tomorrow!")
-    return;
-
     if (items.length === 0) return alert("Cart is empty!")
     if (pincode.length !== 6) return alert("Pincode must be exactly 6 digits.")
 
@@ -333,11 +330,20 @@ export default function CheckoutPage() {
             </div>
 
             <Button
-              type="button"
-              onClick={() => alert("We are currently upgrading our systems. All payments are paused for 24 hours. Please check back tomorrow!")}
-              className="w-full mt-8 py-7 text-lg font-bold bg-muted text-muted-foreground rounded-xl cursor-not-allowed border border-dashed border-border"
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full mt-8 py-7 text-lg font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-lg hover:-translate-y-1"
             >
-              Payments Paused (Maintenance)
+              {isSubmitting ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  {paymentMethod === "UPI" ? `Pay ₹${payNow.toLocaleString()} Now` : `Pay ₹${COD_ADVANCE} Advance`}
+                </>
+              )}
             </Button>
 
             <div className="mt-4 flex justify-center items-center gap-2 text-xs text-muted-foreground">
