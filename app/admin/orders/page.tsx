@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Eye, Truck, CheckCircle, PackageCheck, X, Mail, Phone, MapPin } from "lucide-react"
+import { Eye, Truck, CheckCircle, PackageCheck, X, Mail, Phone, MapPin, Trash2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 // Helper to format price
@@ -59,6 +59,26 @@ export default function AdminOrdersPage() {
     const { error } = await supabase.from("orders").update({ status: newStatus }).eq("id", id)
     if (error) alert("Failed to update")
     else fetchOrders()
+  }
+
+  const handleDeleteOrder = async (id: string) => {
+    const ok = confirm("Delete this order? This action cannot be undone.")
+    if (!ok) return
+    // order_items will be cascade-deleted since they reference the order
+    const { error } = await supabase.from("orders").delete().eq("id", id)
+    if (error) alert("Failed to delete order: " + error.message)
+    else fetchOrders()
+  }
+
+  const handleDeleteAllOrders = async () => {
+    const ok = confirm("Delete ALL orders? This will permanently remove every order record. Use only for demo cleanup.")
+    if (!ok) return
+    const { error } = await supabase.from("orders").delete().neq("id", "00000000-0000-0000-0000-000000000000")
+    if (error) alert("Failed to delete orders: " + error.message)
+    else {
+      fetchOrders()
+      alert("All orders deleted successfully.")
+    }
   }
 
   const handleShipOrder = async () => {
@@ -110,7 +130,16 @@ export default function AdminOrdersPage() {
     <div className="text-white p-4 md:p-8 lg:p-14 relative w-full max-w-full overflow-x-hidden">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
         <h1 className="text-2xl md:text-3xl font-bold">Orders Management</h1>
-        <Button onClick={fetchOrders} variant="outline" className="border-white/20 text-white w-full sm:w-auto">Refresh</Button>
+        <div className="flex gap-2 flex-wrap">
+          <Button onClick={fetchOrders} variant="outline" className="border-white/20 text-white w-full sm:w-auto">Refresh</Button>
+          <Button 
+            onClick={handleDeleteAllOrders} 
+            variant="destructive" 
+            className="w-full sm:w-auto text-sm"
+          >
+            <Trash2 className="w-4 h-4 mr-2" /> Delete All Orders
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-xl border border-white/10 overflow-x-auto bg-[#111] w-full max-w-full">
@@ -173,6 +202,9 @@ export default function AdminOrdersPage() {
                       )}
                       <Button size="icon" variant="ghost" className="h-8 w-8 hover:bg-white/10 text-gray-400" onClick={() => setSelectedOrder(order)}>
                         <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8 hover:bg-red-500/20 text-red-400" onClick={() => handleDeleteOrder(order.id)} title="Delete Order">
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>

@@ -150,22 +150,25 @@ export default function AdminProductsPage() {
   const sortedCategories = Object.keys(groupedProducts).sort()
 
   const handleDelete = async (id: string) => {
-    const ok = confirm("Delete this product?")
+    const ok = confirm("Delete this product?\n\nThis product will be archived (hidden from your store) but preserved in order history records.")
     if (!ok) return
 
-    // SOFT DELETE: We archive the product to prevent breaking order history
-    // and remove it from homepage slots.
-    const { error } = await supabase
-      .from("products")
-      .update({ status: 'archived', homepageslot: null, is_trending: false })
-      .eq("id", id)
+    try {
+      // Step 1: Clear homepage slot first (separate call to avoid trigger issues)
+      await supabase.from("products").update({ homepageslot: null, is_trending: false }).eq("id", id)
 
-    if (error) {
-      alert(error.message)
-      return
+      // Step 2: Archive the product to hide it from the storefront
+      const { error } = await supabase
+        .from("products")
+        .update({ status: 'archived' })
+        .eq("id", id)
+
+      if (error) throw error
+
+      await load()
+    } catch (err: any) {
+      alert("Could not delete product: " + (err?.message || "Unknown error"))
     }
-
-    await load()
   }
 
   const homepageProducts = Array.from({ length: 4 }, (_, i) =>
