@@ -18,7 +18,7 @@ type TopSellingProduct = {
   compare_at_price?: number | null
   image_url: string | null
   homepageslot: number
-  stock_count?: number | null
+  stock?: number | null
 }
 
 export function DynamicTopSellingWatches() {
@@ -35,8 +35,9 @@ export function DynamicTopSellingWatches() {
     const fetchTopSelling = async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("id, name, price, compare_at_price, image_url, homepageslot, stock_count")
+        .select("id, name, price, compare_at_price, image_url, homepageslot, stock")
         .in("homepageslot", [5, 6, 7, 8])
+        .eq("status", "active")
         .order("homepageslot", { ascending: true })
 
       if (!error) setProducts(data ?? [])
@@ -79,12 +80,12 @@ export function DynamicTopSellingWatches() {
 
               {/* SCARCITY / SOLD OUT OVERLAY */}
               <div className="absolute top-3 left-3 z-30 pointer-events-none flex flex-col gap-2">
-                {product.stock_count !== null && product.stock_count !== undefined && product.stock_count <= 5 && product.stock_count > 0 && (
+                {product.stock !== null && product.stock !== undefined && product.stock <= 5 && product.stock > 0 && (
                   <span className="bg-indigo-950 text-indigo-200 border border-indigo-900 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wider shadow-sm w-max animate-pulse">
-                    Only {product.stock_count} Left!
+                    Only {product.stock} Left!
                   </span>
                 )}
-                {product.stock_count === 0 && (
+                {product.stock === 0 && (
                   <span className="bg-neutral-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wider shadow-sm w-max">
                     Sold Out
                   </span>
@@ -105,7 +106,7 @@ export function DynamicTopSellingWatches() {
                     ⌚
                   </div>
                 )}
-                {product.stock_count === 0 && (
+                {product.stock === 0 && (
                   <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] z-10 pointer-events-none" />
                 )}
               </div>
@@ -135,15 +136,15 @@ export function DynamicTopSellingWatches() {
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
-                    if (product.stock_count !== 0) {
+                    if (product.stock !== 0) {
                       router.push(`/products/detail/${product.id}`)
                     }
                   }}
-                  className={`p-2 rounded-full transition-all shadow-sm flex items-center justify-center flex-shrink-0 z-30 relative ${product.stock_count === 0
+                  className={`p-2 rounded-full transition-all shadow-sm flex items-center justify-center flex-shrink-0 z-30 relative ${product.stock === 0
                     ? "bg-neutral-200 text-neutral-400 dark:bg-slate-800 dark:text-slate-500 cursor-not-allowed"
                     : "bg-rose-600 text-white hover:bg-rose-500 hover:scale-105 active:scale-95"
                     }`}
-                  disabled={product.stock_count === 0}
+                  disabled={product.stock === 0}
                 >
                   <ShoppingCart className="w-4 h-4 sm:w-4 sm:h-4" />
                 </button>

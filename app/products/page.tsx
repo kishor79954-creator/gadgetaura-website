@@ -17,7 +17,7 @@ type Product = {
   compare_at_price: number | null
   image_url: string | null
   category_id: string
-  stock_count: number | null
+  stock: number | null
   is_trending: boolean | null
 }
 
@@ -82,11 +82,7 @@ function CatalogContent() {
           ...p,
           categoryIds: pcMap[p.id] || (p.category_id ? [p.category_id] : []),
           is_trending: p.is_trending != null ? p.is_trending : ["1", "4", "7"].includes(p.id.toString()),
-          stock_count: p.stock_count != null ? p.stock_count : (
-            ["3"].includes(p.id.toString()) ? 0 :
-              ["2", "5", "8"].includes(p.id.toString()) ? 3 :
-                10
-          )
+          stock: p.stock != null ? p.stock : 0
         }))
         setProducts(processedProducts)
       }
@@ -121,8 +117,8 @@ function CatalogContent() {
         // Prioritize trending products and in-stock items
         if (a.is_trending && !b.is_trending) return -1
         if (!a.is_trending && b.is_trending) return 1
-        if (a.stock_count !== 0 && b.stock_count === 0) return -1
-        if (a.stock_count === 0 && b.stock_count !== 0) return 1
+        if (a.stock !== 0 && b.stock === 0) return -1
+        if (a.stock === 0 && b.stock !== 0) return 1
         return 0
     }
   })
@@ -219,12 +215,12 @@ function CatalogContent() {
                               Trending <span className="text-sm">🔥</span>
                             </span>
                           )}
-                          {p.stock_count !== null && p.stock_count <= 5 && p.stock_count > 0 && (
+                          {p.stock !== null && p.stock <= 5 && p.stock > 0 && (
                             <span className="bg-indigo-950 text-indigo-200 border border-indigo-900 text-[8px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wider shadow-sm w-max animate-pulse">
-                              Only {p.stock_count} Left!
+                              Only {p.stock} Left!
                             </span>
                           )}
-                          {p.stock_count === 0 && (
+                          {p.stock === 0 && (
                             <span className="bg-neutral-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wider shadow-sm w-max">
                               Sold Out
                             </span>
@@ -267,7 +263,7 @@ function CatalogContent() {
                               No Image
                             </div>
                           )}
-                          {p.stock_count === 0 && (
+                          {p.stock === 0 && (
                             <div className="absolute inset-0 bg-background/50 backdrop-blur-[2px] z-10 pointer-events-none" />
                           )}
                         </div>
@@ -297,16 +293,16 @@ function CatalogContent() {
                             onClick={(e) => {
                               e.preventDefault()
                               e.stopPropagation()
-                              if (p.stock_count !== 0) {
+                              if (p.stock !== 0) {
                                 router.push(`/products/detail/${p.id}`)
                               }
                             }}
-                            disabled={p.stock_count === 0}
-                            className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all shadow-sm z-40 relative ${p.stock_count === 0
+                            disabled={p.stock === 0}
+                            className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all shadow-sm z-40 relative ${p.stock === 0
                               ? "bg-muted text-muted-foreground cursor-not-allowed"
                               : "bg-blue-600 text-white hover:bg-blue-500 hover:text-white hover:scale-105 active:scale-95"
                               }`}
-                            title={p.stock_count === 0 ? "Sold Out" : "View Product"}
+                            title={p.stock === 0 ? "Sold Out" : "View Product"}
                           >
                             <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
                           </button>

@@ -12,8 +12,9 @@ export function DynamicPremiumStack() {
     const fetchPremium = async () => {
       const { data } = await supabase
         .from("products")
-        .select("id, name, price, compare_at_price, image_url, homepageslot, stock_count")
+        .select("id, name, price, compare_at_price, image_url, homepageslot, stock")
         .in("homepageslot", [11, 12, 13, 14, 15])
+        .eq("status", "active")
         .order("homepageslot", { ascending: true })
 
       if (data) setPremium(data as unknown as StackProduct[])

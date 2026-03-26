@@ -546,16 +546,27 @@ export default function NewProductPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Inventory</CardTitle>
+                <CardDescription>Set stock to 0 to mark as Sold Out.</CardDescription>
               </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-4">
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Stock Quantity</Label>
-                  <Input
-                    type="number"
-                    value={stock}
-                    onChange={(e) => setStock(e.target.value)}
-                    placeholder="0"
-                  />
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      value={stock}
+                      onChange={(e) => setStock(e.target.value)}
+                      placeholder="0"
+                    />
+                    <Button 
+                      type="button" 
+                      variant="secondary" 
+                      onClick={() => setStock("0")}
+                      className="whitespace-nowrap"
+                    >
+                      Mark Out of Stock
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

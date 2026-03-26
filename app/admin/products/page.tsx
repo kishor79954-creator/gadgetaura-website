@@ -153,11 +153,12 @@ export default function AdminProductsPage() {
     const ok = confirm("Delete this product?")
     if (!ok) return
 
-    // IMPORTANT: Clear relational constraints to prevent silent FK failures!
-    await supabase.from("product_categories").delete().eq("product_id", id)
-    await supabase.from("product_images").delete().eq("product_id", id)
-
-    const { error } = await supabase.from("products").delete().eq("id", id)
+    // SOFT DELETE: We archive the product to prevent breaking order history
+    // and remove it from homepage slots.
+    const { error } = await supabase
+      .from("products")
+      .update({ status: 'archived', homepageslot: null, is_trending: false })
+      .eq("id", id)
 
     if (error) {
       alert(error.message)

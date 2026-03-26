@@ -618,16 +618,27 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             <Card>
               <CardHeader>
                 <CardTitle>Inventory</CardTitle>
+                <CardDescription>Set stock to 0 to mark as Sold Out.</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Stock</Label>
-                    <Input
-                      type="number"
-                      value={stock}
-                      onChange={e => setStock(e.target.value)}
-                    />
+                    <div className="flex gap-2">
+                      <Input
+                        type="number"
+                        value={stock}
+                        onChange={e => setStock(e.target.value)}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="secondary" 
+                        onClick={() => setStock("0")}
+                        className="whitespace-nowrap"
+                      >
+                        Mark Out of Stock
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>

@@ -206,7 +206,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               disabled={currentStock <= 0}
               className="flex-1 h-14 text-base lg:text-lg rounded-xl border-primary/20 hover:bg-primary/5 text-primary"
             >
-              <ShoppingCart className="mr-2 h-5 w-5" /> {currentStock > 0 ? "Add to Cart" : "Unavailable"}
+              <ShoppingCart className="mr-2 h-5 w-5" /> {currentStock > 0 ? "Add to Cart" : "Out of Stock"}
             </Button>
             <Button
               variant="cta"
