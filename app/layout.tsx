@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   keywords: ["gadgets", "electronics", "premium tech", "tech accessories", "GadgetAura", "mobile", "laptops", "smartwatches"],
   authors: [{ name: "GadgetAura" }],
   creator: "GadgetAura",
+  icons: {
+    icon: [
+      { url: "/logo.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/logo.png", type: "image/png" },
+    ],
+    shortcut: "/logo.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
