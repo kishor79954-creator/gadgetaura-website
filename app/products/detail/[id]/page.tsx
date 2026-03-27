@@ -239,7 +239,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         </div>
       </div>
 
-      {/* SEO: JSON-LD Structured Data for Google Rich Snippets */}
+      {/* SEO: JSON-LD Structured Data for Google Rich Snippets + Shopping */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -247,8 +247,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             "@context": "https://schema.org/",
             "@type": "Product",
             name: product.name,
-            image: product.allImages || [product.image_url],
+            image: product.allImages?.length > 0 ? product.allImages : [product.image_url].filter(Boolean),
             description: product.description || "Premium Gadget from GadgetAura",
+            sku: product.id,
+            mpn: product.id,
             brand: {
               "@type": "Brand",
               name: "GadgetAura",
@@ -257,9 +259,49 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               "@type": "Offer",
               url: `https://www.gadgetaura.in/products/detail/${product.id}`,
               priceCurrency: "INR",
-              price: product.price,
+              price: displayPrice,
+              priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
               availability: currentStock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
               itemCondition: "https://schema.org/NewCondition",
+              seller: {
+                "@type": "Organization",
+                name: "GadgetAura",
+                url: "https://www.gadgetaura.in",
+              },
+              shippingDetails: {
+                "@type": "OfferShippingDetails",
+                shippingRate: {
+                  "@type": "MonetaryAmount",
+                  value: "0",
+                  currency: "INR",
+                },
+                deliveryTime: {
+                  "@type": "ShippingDeliveryTime",
+                  handlingTime: {
+                    "@type": "QuantitativeValue",
+                    minValue: 0,
+                    maxValue: 2,
+                    unitCode: "DAY",
+                  },
+                  transitTime: {
+                    "@type": "QuantitativeValue",
+                    minValue: 3,
+                    maxValue: 7,
+                    unitCode: "DAY",
+                  },
+                },
+                shippingDestination: {
+                  "@type": "DefinedRegion",
+                  addressCountry: "IN",
+                },
+              },
+              hasMerchantReturnPolicy: {
+                "@type": "MerchantReturnPolicy",
+                returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+                merchantReturnDays: 7,
+                returnMethod: "https://schema.org/ReturnByMail",
+                returnFees: "https://schema.org/FreeReturn",
+              },
             },
           }),
         }}

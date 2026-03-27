@@ -29,6 +29,14 @@ export const metadata: Metadata = {
     title: "GadgetAura | Premium Gadgets Store",
     description: "Discover the latest premium gadgets, electronics, and accessories at GadgetAura.",
     siteName: "GadgetAura",
+    images: [
+      {
+        url: "https://www.gadgetaura.in/logo.png",
+        width: 512,
+        height: 512,
+        alt: "GadgetAura Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -90,6 +98,49 @@ export default function RootLayout({
         {/* Global Components */}
         <CookieConsent />
         <PageTransitionLoader />
+
+        {/* SEO: Organization & WebSite Schema for Google Logo + Sitelinks */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: "GadgetAura",
+                url: "https://www.gadgetaura.in",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://www.gadgetaura.in/logo.png",
+                  width: 512,
+                  height: 512,
+                },
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  contactType: "customer support",
+                  availableLanguage: ["English", "Hindi"],
+                },
+                sameAs: [
+                  "https://www.gadgetaura.in",
+                ],
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "GadgetAura",
+                url: "https://www.gadgetaura.in",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate: "https://www.gadgetaura.in/products?q={search_term_string}",
+                  },
+                  "query-input": "required name=search_term_string",
+                },
+              },
+            ]),
+          }}
+        />
       </body>
     </html>
   )
