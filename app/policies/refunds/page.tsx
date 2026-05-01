@@ -17,7 +17,7 @@ export default function RefundPolicy() {
                 <p>You will be responsible for paying for your own shipping costs for returning your item. Shipping costs are non-refundable. If you receive a refund, the cost of return shipping will be deducted from your refund.</p>
 
                 <h2>Contact Us</h2>
-                <p>If you have any questions on how to return your item to us, please contact us at support@gadgetaura.com.</p>
+                <p>If you have any questions on how to return your item to us, please contact us at <a href="mailto:customersupport@gadgetaura.in" style={{color: 'inherit', textDecoration: 'underline'}}>customersupport@gadgetaura.in</a>.</p>
 
                 <p className="mt-8 text-sm text-muted-foreground">Last updated: February 2026</p>
             </div>

@@ -44,7 +44,7 @@ export default function FAQPage() {
                     <AccordionItem value="item-5">
                         <AccordionTrigger>How do I return an item?</AccordionTrigger>
                         <AccordionContent>
-                            Please refer to our Refund Policy for detailed instructions. You can initiate a return within 7 days of receiving your item by contacting support@gadgetaura.com.
+                            Please refer to our Refund Policy for detailed instructions. You can initiate a return within 7 days of receiving your item by contacting customersupport@gadgetaura.in.
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>

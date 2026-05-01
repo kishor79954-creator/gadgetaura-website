@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 
 export function Footer() {
   return (
@@ -11,9 +10,12 @@ export function Footer() {
           <h3 className="text-xl font-bold text-foreground mb-4">
             Gadgetaura
           </h3>
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            Premium watches, gadgets & lifestyle tech curated
+          <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+            Premium watches, gadgets &amp; lifestyle tech curated
             for the next generation.
+          </p>
+          <p className="text-muted-foreground text-xs flex items-center gap-1.5">
+            <span>📍</span> Hyderabad, Telangana, India
           </p>
         </div>
 
@@ -23,26 +25,32 @@ export function Footer() {
             Categories
           </h4>
           <ul className="space-y-3 text-muted-foreground text-sm">
-            <li><Link href="/products/watches" className="hover:text-foreground transition-colors">Watches</Link></li>
-            <li><Link href="/products/audio" className="hover:text-foreground transition-colors">Audio</Link></li>
-            <li><Link href="/products/gadgets" className="hover:text-foreground transition-colors">Gadgets</Link></li>
-            <li><Link href="/products/accessories" className="hover:text-foreground transition-colors">Accessories</Link></li>
+            <li><Link href="/products?category=watches" className="hover:text-foreground transition-colors">Watches</Link></li>
+            <li><Link href="/products?category=audio" className="hover:text-foreground transition-colors">Audio</Link></li>
+            <li><Link href="/products?category=gadgets" className="hover:text-foreground transition-colors">Gadgets</Link></li>
+            <li><Link href="/products?category=accessories" className="hover:text-foreground transition-colors">Accessories</Link></li>
           </ul>
         </div>
 
         {/* HELP & SUPPORT */}
         <div>
           <h4 className="text-yellow-500 text-xs uppercase tracking-widest mb-4 font-bold">
-            Help & Support
+            Help &amp; Support
           </h4>
           <ul className="space-y-3 text-muted-foreground text-sm">
             <li><Link href="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
             <li><Link href="/policies/shipping" className="hover:text-foreground transition-colors">Shipping Policy</Link></li>
-            <li><Link href="/policies/refunds" className="hover:text-foreground transition-colors">Returns & Refunds</Link></li>
+            <li><Link href="/policies/refunds" className="hover:text-foreground transition-colors">Returns &amp; Refunds</Link></li>
             <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact Us</Link></li>
+            <li><Link href="/about" className="hover:text-foreground transition-colors">About Us</Link></li>
             <li className="pt-2">
               <a href="mailto:customersupport@gadgetaura.in" className="text-yellow-500 hover:text-yellow-400 transition-colors font-medium">
                 customersupport@gadgetaura.in
+              </a>
+            </li>
+            <li>
+              <a href="https://wa.me/917995473593" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-green-500 hover:text-green-400 transition-colors font-medium text-xs">
+                <span>💬</span> WhatsApp Support
               </a>
             </li>
           </ul>
@@ -95,7 +103,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-border py-6 text-center text-muted-foreground/60 text-sm">
-        © 2026 Gadgetaura. All rights reserved.
+        © 2026 Gadgetaura. All rights reserved. | Hyderabad, Telangana, India
       </div>
     </footer>
   )
